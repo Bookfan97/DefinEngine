@@ -1,8 +1,18 @@
 cmake_minimum_required(VERSION 3.10)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project (GameDevelopmentProject)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(GitVersion)
+get_version_from_git()
+
+project (GameDevelopmentProject VERSION ${CMAKE_PROJECT_VERSION})
+
+configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/version.h.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/version.h"
+)
 
 set(PROJECT_SOURCE_FILES
         source/main.cpp
@@ -22,14 +32,14 @@ endif()
 
 # Add the application
 add_executable(${PROJECT_NAME} ${APP_TYPE} ${PROJECT_SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE source)
+target_include_directories(${PROJECT_NAME} PRIVATE source "${CMAKE_CURRENT_BINARY_DIR}")
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE_BUNDLE_NAME "GameDevelopmentProject"
             MACOSX_BUNDLE_GUI_IDENTIFIER "com.user.GameDevelopmentProject"
-            MACOSX_BUNDLE_BUNDLE_VERSION "0.0.1"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "0.0.1"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${CMAKE_PROJECT_VERSION}"
     )
 endif()
 

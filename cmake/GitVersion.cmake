@@ -1,0 +1,35 @@
+find_package(Git QUIET)
+
+function(get_version_from_git)
+    set(PROJECT_VERSION_MAJOR 0)
+    set(PROJECT_VERSION_MINOR 0)
+    set(PROJECT_VERSION_PATCH 0)
+    set(PROJECT_VERSION_TWEAK 0)
+
+    if(GIT_FOUND)
+        execute_process(
+            COMMAND ${GIT_EXECUTABLE} describe --tags --always --dirty
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            OUTPUT_VARIABLE GIT_DESCRIBE_OUT
+            RESULT_VARIABLE GIT_DESCRIBE_RESULT
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+
+        if(GIT_DESCRIBE_RESULT EQUAL 0)
+            # Expecting tag like v1.2.3 or 1.2.3
+            if(GIT_DESCRIBE_OUT MATCHES "^v?([0-9]+)\\.([0-9]+)\\.([0-9]+)(.*)$")
+                set(PROJECT_VERSION_MAJOR ${CMAKE_MATCH_1})
+                set(PROJECT_VERSION_MINOR ${CMAKE_MATCH_2})
+                set(PROJECT_VERSION_PATCH ${CMAKE_MATCH_3})
+                set(PROJECT_VERSION_TWEAK ${CMAKE_MATCH_4})
+            endif()
+        endif()
+    endif()
+
+    set(CMAKE_PROJECT_VERSION_MAJOR ${PROJECT_VERSION_MAJOR} PARENT_SCOPE)
+    set(CMAKE_PROJECT_VERSION_MINOR ${PROJECT_VERSION_MINOR} PARENT_SCOPE)
+    set(CMAKE_PROJECT_VERSION_PATCH ${PROJECT_VERSION_PATCH} PARENT_SCOPE)
+    set(CMAKE_PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}" PARENT_SCOPE)
+    
+    message(STATUS "Project Version: ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK}")
+endfunction()
