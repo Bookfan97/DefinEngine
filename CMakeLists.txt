@@ -14,13 +14,14 @@ find_package(OpenGL REQUIRED)
 if(APPLE)
     set(APP_TYPE MACOSX_BUNDLE)
 elseif(WIN32)
-    set(APP_TYPE WIN32)
-    add_definitions(-DGLEW_STATIC)
+    # We use a console application by default on Windows to avoid unresolved WinMain.
+    # If a GUI-only app is desired, use WIN32 here and change main() to WinMain() or use linker flags.
+    set(APP_TYPE "")
 endif()
 
 # Add the application
-include_directories(source)
 add_executable(${PROJECT_NAME} ${APP_TYPE} ${PROJECT_SOURCE_FILES})
+target_include_directories(${PROJECT_NAME} PRIVATE source)
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -33,18 +34,22 @@ endif()
 
 # Add GLFW library
 add_subdirectory(thirdparty/glfw-3.4 "${CMAKE_CURRENT_BINARY_DIR}/glfw_build")
-include_directories(thirdparty/glfw-3.4/include)
+target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/glfw-3.4/include)
 
 # Add Glew library
 add_compile_definitions(GLEW_NO_GLU)
 set(BUILD_UTILS OFF CACHE BOOL "utilities" FORCE)
 add_subdirectory(thirdparty/glew/build/cmake "${CMAKE_CURRENT_BINARY_DIR}/glew_build")
-include_directories(thirdparty/glew/include)
+target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/glew/include)
 set_property(TARGET glew_s PROPERTY FOLDER GLEW)
 set_property(TARGET glew PROPERTY FOLDER GLEW)
 
 # Link all thirdparty libraries
-target_link_libraries(${PROJECT_NAME}
+if(WIN32)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)
+endif()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
         glew_s
         OpenGL::GL
