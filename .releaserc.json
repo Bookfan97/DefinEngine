@@ -1,0 +1,15 @@
+{
+  "branches": ["main"],
+  "tagFormat": "v${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    ["@semantic-release/github", {
+      "assets": [
+        {"path": "artifacts/**/*.zip", "label": "Windows (ZIP)"},
+        {"path": "artifacts/**/*.tar.gz", "label": "Linux (TGZ)"},
+        {"path": "artifacts/**/*.dmg", "label": "macOS (DMG)"}
+      ]
+    }]
+  ]
+}
