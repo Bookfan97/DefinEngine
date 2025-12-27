@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project (GameDevelopmentProject)
 
 set(PROJECT_SOURCE_FILES
-  source/main.cpp
+        source/main.cpp
 )
 # Find system OpenGL
 find_package(OpenGL REQUIRED)
@@ -24,10 +24,10 @@ add_executable(${PROJECT_NAME} ${APP_TYPE} ${PROJECT_SOURCE_FILES})
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
-        MACOSX_BUNDLE_BUNDLE_NAME "GameDevelopmentProject"
-        MACOSX_BUNDLE_GUI_IDENTIFIER "com.user.GameDevelopmentProject"
-        MACOSX_BUNDLE_BUNDLE_VERSION "0.0.1"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "0.0.1"
+            MACOSX_BUNDLE_BUNDLE_NAME "GameDevelopmentProject"
+            MACOSX_BUNDLE_GUI_IDENTIFIER "com.user.GameDevelopmentProject"
+            MACOSX_BUNDLE_BUNDLE_VERSION "0.0.1"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "0.0.1"
     )
 endif()
 
@@ -44,8 +44,8 @@ set_property(TARGET glew_s PROPERTY FOLDER GLEW)
 set_property(TARGET glew PROPERTY FOLDER GLEW)
 
 # Link all thirdparty libraries
-target_link_libraries(${PROJECT_NAME} 
-    glfw 
-    glew_s
-    OpenGL::GL
+target_link_libraries(${PROJECT_NAME}
+        glfw
+        glew_s
+        OpenGL::GL
 )
