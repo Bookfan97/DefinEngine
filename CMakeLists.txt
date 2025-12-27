@@ -49,8 +49,13 @@ if(WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)
 endif()
 
+if(UNIX AND NOT APPLE)
+    set(EXTRA_LIBS ${CMAKE_DL_LIBS} pthread)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
         glew_s
         OpenGL::GL
+        ${EXTRA_LIBS}
 )
