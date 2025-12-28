@@ -1,8 +1,18 @@
 cmake_minimum_required(VERSION 3.10)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project (GameDevelopmentProject)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(GitVersion)
+get_version_from_git()
+
+project (GameDevelopmentProject VERSION ${CMAKE_PROJECT_VERSION})
+
+configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/version.h.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/version.h"
+)
 
 set(PROJECT_SOURCE_FILES
         source/main.cpp
@@ -22,18 +32,22 @@ endif()
 
 # Add the application
 add_executable(${PROJECT_NAME} ${APP_TYPE} ${PROJECT_SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE source)
+target_include_directories(${PROJECT_NAME} PRIVATE source "${CMAKE_CURRENT_BINARY_DIR}")
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE_BUNDLE_NAME "GameDevelopmentProject"
             MACOSX_BUNDLE_GUI_IDENTIFIER "com.user.GameDevelopmentProject"
-            MACOSX_BUNDLE_BUNDLE_VERSION "0.0.1"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "0.0.1"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${CMAKE_PROJECT_VERSION}"
     )
 endif()
 
 # Add GLFW library
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(thirdparty/glfw-3.4 "${CMAKE_CURRENT_BINARY_DIR}/glfw_build")
 target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/glfw-3.4/include)
 
@@ -60,3 +74,27 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         OpenGL::GL
         ${EXTRA_LIBS}
 )
+
+# Installation and CPack
+include(GNUInstallDirs)
+install(TARGETS ${PROJECT_NAME}
+        BUNDLE DESTINATION .
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_VENDOR "User")
+set(CPACK_PACKAGE_VERSION_MAJOR "${CMAKE_PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${CMAKE_PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${CMAKE_PROJECT_VERSION_PATCH}")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A basic C++ game engine project")
+
+if(APPLE)
+    set(CPACK_GENERATOR "DragNDrop")
+elseif(WIN32)
+    set(CPACK_GENERATOR "ZIP")
+else()
+    set(CPACK_GENERATOR "TGZ")
+endif()
+
+include(CPack)
