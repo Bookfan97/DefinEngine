@@ -48,14 +48,14 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-add_subdirectory(thirdparty/glfw-3.4 "${CMAKE_CURRENT_BINARY_DIR}/glfw_build")
-target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/glfw-3.4/include)
+add_subdirectory(engine/thirdparty/glfw-3.4 "${CMAKE_CURRENT_BINARY_DIR}/glfw_build")
+target_include_directories(${PROJECT_NAME} PRIVATE engine/thirdparty/glfw-3.4/include)
 
 # Add Glew library
 add_compile_definitions(GLEW_NO_GLU)
 set(BUILD_UTILS OFF CACHE BOOL "utilities" FORCE)
-add_subdirectory(thirdparty/glew/build/cmake "${CMAKE_CURRENT_BINARY_DIR}/glew_build")
-target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/glew/include)
+add_subdirectory(engine/thirdparty/glew/build/cmake "${CMAKE_CURRENT_BINARY_DIR}/glew_build")
+target_include_directories(${PROJECT_NAME} PRIVATE engine/thirdparty/glew/include)
 set_property(TARGET glew_s PROPERTY FOLDER GLEW)
 set_property(TARGET glew PROPERTY FOLDER GLEW)
 
