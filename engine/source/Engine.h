@@ -2,21 +2,26 @@
 #include <memory>
 #include <chrono>
 
-namespace eng
-{
+struct GLFWwindow;
+
+namespace eng {
     class Application;
-    class Engine
-    {
+
+    class Engine {
     public:
-        bool Init();
+        bool Init(int width, int height);
+
         void Run();
+
         void Destroy();
 
-        void SetApplication(Application* app);
-        Application* GetApplication();
+        void SetApplication(Application *app);
+
+        Application *GetApplication();
 
     private:
         std::unique_ptr<Application> m_application;
         std::chrono::steady_clock::time_point m_lastTimePoint;
+        GLFWwindow *m_window = nullptr;
     };
 }

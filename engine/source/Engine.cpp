@@ -1,59 +1,79 @@
 #include "Engine.h"
 #include "Application.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
 
-namespace eng
-{
-    /**
-     * Initializes the engine by delegating the initialization process to the associated application.
-     * Ensures that the application exists before attempting to initialize it.
-     *
-     * @return True if the application was successfully initialized; otherwise, false if the application is not set or fails to initialize.
-     */
-    bool Engine::Init()
-    {
-        if (!m_application)
-        {
+namespace eng {
+    bool Engine::Init(int width, int height) {
+        if (!m_application) {
             return false;
         }
+
+#if defined (__linux__)
+        glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+#endif
+
+        if (!glfwInit()) {
+            return false;
+        }
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+        m_window = glfwCreateWindow(width, height, "GameDevelopmentProject", nullptr, nullptr);
+
+        if (m_window == nullptr) {
+            std::cout << "Error creating window" << std::endl;
+            glfwTerminate();
+            return false;
+        }
+
+        glfwMakeContextCurrent(m_window);
+
+        if (glewInit() != GLEW_OK) {
+            glfwTerminate();
+            return false;
+        }
+
         return m_application->Init();
     }
 
-    void Engine::Run()
-    {
-        if (!m_application)
-        {
+    void Engine::Run() {
+        if (!m_application) {
             return;
         }
 
-        // Initialize time tracking
         m_lastTimePoint = std::chrono::steady_clock::now();
 
-        while (!m_application->NeedsToBeClosed())
-        {
+        while (!glfwWindowShouldClose(m_window) && !m_application->NeedsToBeClosed()) {
+            glfwPollEvents();
+
             auto now = std::chrono::steady_clock::now();
             float deltaTime = std::chrono::duration<float>(now - m_lastTimePoint).count();
             m_lastTimePoint = now;
 
             m_application->Update(deltaTime);
+
+            glfwSwapBuffers(m_window);
         }
     }
 
-    void Engine::Destroy()
-    {
-        if (m_application)
-        {
+    void Engine::Destroy() {
+        if (m_application) {
             m_application->Destroy();
             m_application.reset();
+            glfwTerminate();
+            m_window = nullptr;
         }
     }
 
-    void Engine::SetApplication(Application* app)
-    {
+    void Engine::SetApplication(Application *app) {
         m_application.reset(app);
     }
 
-    Application* Engine::GetApplication()
-    {
+    Application *Engine::GetApplication() {
         return m_application.get();
     }
 }
