@@ -3,6 +3,12 @@
 
 namespace eng
 {
+    /**
+     * Initializes the engine by delegating the initialization process to the associated application.
+     * Ensures that the application exists before attempting to initialize it.
+     *
+     * @return True if the application was successfully initialized; otherwise, false if the application is not set or fails to initialize.
+     */
     bool Engine::Init()
     {
         if (!m_application)
