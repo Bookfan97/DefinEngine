@@ -1,7 +1,5 @@
-#include "game.h"
-
+#include "Game.h"
 #include <iostream>
-#include <ostream>
 
 bool Game::Init() {
     return true;
