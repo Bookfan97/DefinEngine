@@ -16,6 +16,9 @@ configure_file(
 
 set(PROJECT_SOURCE_FILES
         source/main.cpp
+        source/game.cpp
+        engine/source/Engine.cpp
+        engine/source/Application.cpp
 )
 # Find system OpenGL
 set(OpenGL_GL_PREFERENCE GLVND)
@@ -27,12 +30,15 @@ if(APPLE)
 elseif(WIN32)
     # We use a console application by default on Windows to avoid unresolved WinMain.
     # If a GUI-only app is desired, use WIN32 here and change main() to WinMain() or use linker flags.
-    set(APP_TYPE "")
+    set(APP_TYPE ""
+            engine/source/eng.h
+            source/game.cpp
+            source/game.h)
 endif()
 
 # Add the application
 add_executable(${PROJECT_NAME} ${APP_TYPE} ${PROJECT_SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE source "${CMAKE_CURRENT_BINARY_DIR}")
+target_include_directories(${PROJECT_NAME} PRIVATE source engine/source "${CMAKE_CURRENT_BINARY_DIR}")
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
