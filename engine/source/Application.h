@@ -3,6 +3,8 @@
 namespace eng {
     class Application {
     public:
+        virtual ~Application() = default;
+
         virtual bool Init() = 0;
 
         // deltaTime in seconds

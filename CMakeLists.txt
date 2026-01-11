@@ -19,6 +19,7 @@ set(PROJECT_SOURCE_FILES
         source/game.cpp
         engine/source/Engine.cpp
         engine/source/Application.cpp
+        engine/source/input/InputManager.cpp
 )
 # Find system OpenGL
 set(OpenGL_GL_PREFERENCE GLVND)
