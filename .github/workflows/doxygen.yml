@@ -44,4 +44,4 @@ jobs:
         uses: Andrew-Chen-Wang/github-wiki-action@v5
         with:
           path: wiki_content
-          strategy: sync
+          strategy: clone
