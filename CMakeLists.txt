@@ -16,8 +16,8 @@ configure_file(
 
 set(PROJECT_SOURCE_FILES
         source/main.cpp
-        source/Game.cpp
-        source/Game.h
+        source/game.cpp
+        source/game.h
         engine/source/Engine.cpp
         engine/source/Engine.h
         engine/source/Application.cpp
