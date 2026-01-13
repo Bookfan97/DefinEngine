@@ -16,6 +16,26 @@ configure_file(
 
 set(PROJECT_SOURCE_FILES
         source/main.cpp
+        source/Game.cpp
+        source/Game.h
+        engine/source/Engine.cpp
+        engine/source/Engine.h
+        engine/source/Application.cpp
+        engine/source/Application.h
+        engine/source/eng.h
+        engine/source/input/InputManager.cpp
+        engine/source/input/InputManager.h
+        engine/source/graphics/ShaderProgram.cpp
+        engine/source/graphics/ShaderProgram.h
+        engine/source/graphics/GraphicsAPI.cpp
+        engine/source/graphics/GraphicsAPI.h
+        engine/source/graphics/VertexLayout.h
+        engine/source/render/Mesh.cpp
+        engine/source/render/Mesh.h
+        engine/source/render/Material.cpp
+        engine/source/render/Material.h
+        engine/source/render/RenderQueue.cpp
+        engine/source/render/RenderQueue.h
 )
 # Find system OpenGL
 set(OpenGL_GL_PREFERENCE GLVND)
@@ -32,7 +52,7 @@ endif()
 
 # Add the application
 add_executable(${PROJECT_NAME} ${APP_TYPE} ${PROJECT_SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE source "${CMAKE_CURRENT_BINARY_DIR}")
+target_include_directories(${PROJECT_NAME} PRIVATE source engine/source "${CMAKE_CURRENT_BINARY_DIR}")
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -48,14 +68,14 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-add_subdirectory(thirdparty/glfw-3.4 "${CMAKE_CURRENT_BINARY_DIR}/glfw_build")
-target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/glfw-3.4/include)
+add_subdirectory(engine/thirdparty/glfw-3.4 "${CMAKE_CURRENT_BINARY_DIR}/glfw_build")
+target_include_directories(${PROJECT_NAME} PRIVATE engine/thirdparty/glfw-3.4/include)
 
 # Add Glew library
 add_compile_definitions(GLEW_NO_GLU)
 set(BUILD_UTILS OFF CACHE BOOL "utilities" FORCE)
-add_subdirectory(thirdparty/glew/build/cmake "${CMAKE_CURRENT_BINARY_DIR}/glew_build")
-target_include_directories(${PROJECT_NAME} PRIVATE thirdparty/glew/include)
+add_subdirectory(engine/thirdparty/glew/build/cmake "${CMAKE_CURRENT_BINARY_DIR}/glew_build")
+target_include_directories(${PROJECT_NAME} PRIVATE engine/thirdparty/glew/include)
 set_property(TARGET glew_s PROPERTY FOLDER GLEW)
 set_property(TARGET glew PROPERTY FOLDER GLEW)
 
