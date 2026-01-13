@@ -10,8 +10,19 @@ struct GLFWwindow;
 namespace eng {
     class Application;
 
+    /**
+     * @class Engine
+     * @brief The core engine class managing the game lifecycle and systems.
+     * 
+     * This class follows the Singleton pattern and provides access to major
+     * engine systems like GraphicsAPI, InputManager, and RenderQueue.
+     */
     class Engine {
     public:
+        /**
+         * @brief Gets the singleton instance of the Engine.
+         * @return Reference to the Engine instance.
+         */
         static Engine &GetInstance();
 
     private:
@@ -26,20 +37,52 @@ namespace eng {
         Engine &operator=(Engine &&) = delete;
 
     public:
+        /**
+         * @brief Initializes the engine and its systems.
+         * @param width The width of the game window.
+         * @param height The height of the game window.
+         * @return true if initialization was successful, false otherwise.
+         */
         bool Init(int width, int height);
 
+        /**
+         * @brief Starts the main game loop.
+         */
         void Run();
 
+        /**
+         * @brief Shuts down the engine and cleans up resources.
+         */
         void Destroy();
 
+        /**
+         * @brief Sets the current application to be managed by the engine.
+         * @param app Pointer to the application instance.
+         */
         void SetApplication(Application *app);
 
+        /**
+         * @brief Gets the current application instance.
+         * @return Pointer to the Application instance.
+         */
         Application *GetApplication();
 
+        /**
+         * @brief Gets the InputManager system.
+         * @return Reference to the InputManager.
+         */
         InputManager &GetInputManager();
 
+        /**
+         * @brief Gets the GraphicsAPI system.
+         * @return Reference to the GraphicsAPI.
+         */
         GraphicsAPI &GetGraphicsAPI();
 
+        /**
+         * @brief Gets the RenderQueue system.
+         * @return Reference to the RenderQueue.
+         */
         RenderQueue &GetRenderQueue();
 
     private:

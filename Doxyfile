@@ -1,0 +1,50 @@
+# Doxyfile for Basic Game Engine
+
+# Project related configuration
+PROJECT_NAME           = "Basic Game Engine"
+PROJECT_NUMBER         = 1.0.0
+OUTPUT_DIRECTORY       = docs
+CREATE_SUBDIRECTORY    = YES
+OUTPUT_LANGUAGE        = English
+BRIEF_MEMBER_DESC      = YES
+REPEAT_BRIEF           = YES
+
+# Input configuration
+INPUT                  = source/ engine/source/ README.md
+RECURSIVE              = YES
+FILE_PATTERNS          = *.c \
+                         *.cc \
+                         *.cxx \
+                         *.cpp \
+                         *.c++ \
+                         *.h \
+                         *.hh \
+                         *.hpp \
+                         *.h++ \
+                         *.md
+
+# Extraction configuration
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+SORT_MEMBER_DOCS       = YES
+
+# Markdown support
+USE_MDRV8_AREAS        = YES
+
+# HTML output configuration
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_FILE_EXTENSION    = .html
+
+# LaTex output configuration (Disabled)
+GENERATE_LATEX         = NO
+
+# XML output configuration (Enabled for Wiki conversion)
+GENERATE_XML           = YES
+XML_OUTPUT             = xml
+XML_PROGRAMLISTING     = YES
+
+# Graphviz usage (Optional, but useful if available on CI)
+HAVE_DOT               = NO
