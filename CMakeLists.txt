@@ -20,6 +20,10 @@ set(PROJECT_SOURCE_FILES
         engine/source/Engine.cpp
         engine/source/Application.cpp
         engine/source/input/InputManager.cpp
+        engine/source/graphics/ShaderProgram.cpp
+        engine/source/graphics/ShaderProgram.h
+        engine/source/graphics/GraphicsAPI.cpp
+        engine/source/graphics/GraphicsAPI.h
 )
 # Find system OpenGL
 set(OpenGL_GL_PREFERENCE GLVND)
@@ -27,14 +31,21 @@ find_package(OpenGL REQUIRED)
 
 # Determine application type
 if(APPLE)
-    set(APP_TYPE MACOSX_BUNDLE)
+    set(APP_TYPE MACOSX_BUNDLE
+            engine/source/graphics/GraphicsAPI.cpp
+            engine/source/graphics/GraphicsAPI.h)
 elseif(WIN32)
     # We use a console application by default on Windows to avoid unresolved WinMain.
     # If a GUI-only app is desired, use WIN32 here and change main() to WinMain() or use linker flags.
     set(APP_TYPE ""
             engine/source/eng.h
             source/game.cpp
-            source/game.h)
+            source/game.h
+            engine/source/graphics/ShaderProgram.cpp
+            engine/source/graphics/ShaderProgram.h
+            engine/source/graphics/ShaderProgram.cpp
+            engine/source/graphics/GraphicsAPI.cpp
+            engine/source/graphics/GraphicsAPI.h)
 endif()
 
 # Add the application
