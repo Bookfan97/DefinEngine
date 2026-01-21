@@ -1,0 +1,29 @@
+name: Lint
+
+on: [pull_request]
+
+jobs:
+  cpp-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run cpp-linter
+        uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: 'file'  # Use .clang-format
+          tidy-checks: '-*,bugprone-*,clang-analyzer-*,google-*,modernize-*,performance-*,portability-*,readability-*'
+          files-changed-only: false
+          thread-comments: true
+          step-summary: true
+          database: '' # Let it find compile_commands.json if available, or just run without it
+          extra-args: '-std=c++17'
+          # Ignore thirdparty and other irrelevant directories
+          ignore: 'engine/thirdparty|build|cmake-build-*'
+
+      - name: Fail if linter found errors
+        if: steps.linter.outputs.checks-failed > 0
+        run: exit 1

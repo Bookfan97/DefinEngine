@@ -6,6 +6,11 @@ function(get_version_from_git)
     set(PROJECT_VERSION_PATCH 0)
     set(PROJECT_VERSION_TWEAK 0)
 
+    if(CMAKE_PROJECT_VERSION AND NOT CMAKE_PROJECT_VERSION STREQUAL "0.0.0")
+        message(STATUS "Using provided CMAKE_PROJECT_VERSION: ${CMAKE_PROJECT_VERSION}")
+        return()
+    endif()
+
     if(GIT_FOUND)
         execute_process(
             COMMAND ${GIT_EXECUTABLE} describe --tags --always --dirty
