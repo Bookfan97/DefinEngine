@@ -2,43 +2,38 @@
 #include "input/InputManager.h"
 #include "graphics/GraphicsAPI.h"
 #include "render/RenderQueue.h"
+#include "scene/Scene.h"
 #include <memory>
 #include <chrono>
 
 struct GLFWwindow;
-
-namespace eng {
+namespace eng
+{
     class Application;
 
     /**
      * @class Engine
-     * @brief The core engine class managing the game lifecycle and systems.
-     * 
-     * This class follows the Singleton pattern and provides access to major
-     * engine systems like GraphicsAPI, InputManager, and RenderQueue.
+     * @brief The core engine class managing subsystems and the application lifecycle.
      */
-    class Engine {
+    class Engine
+    {
     public:
         /**
          * @brief Gets the singleton instance of the Engine.
          * @return Reference to the Engine instance.
          */
-        static Engine &GetInstance();
+        static Engine& GetInstance();
 
     private:
         Engine() = default;
-
-        Engine(const Engine &) = delete;
-
-        Engine(Engine &&) = delete;
-
-        Engine &operator=(const Engine &) = delete;
-
-        Engine &operator=(Engine &&) = delete;
+        Engine(const Engine&) = delete;
+        Engine(Engine&&) = delete;
+        Engine& operator=(const Engine&) = delete;
+        Engine& operator=(Engine&&) = delete;
 
     public:
         /**
-         * @brief Initializes the engine and its systems.
+         * @brief Initializes the engine and its subsystems.
          * @param width The width of the game window.
          * @param height The height of the game window.
          * @return true if initialization was successful, false otherwise.
@@ -46,7 +41,7 @@ namespace eng {
         bool Init(int width, int height);
 
         /**
-         * @brief Starts the main game loop.
+         * @brief Runs the main engine loop.
          */
         void Run();
 
@@ -56,41 +51,54 @@ namespace eng {
         void Destroy();
 
         /**
-         * @brief Sets the current application to be managed by the engine.
-         * @param app Pointer to the application instance.
+         * @brief Sets the current application.
+         * @param app Pointer to the application.
          */
-        void SetApplication(Application *app);
+        void SetApplication(Application* app);
 
         /**
-         * @brief Gets the current application instance.
-         * @return Pointer to the Application instance.
+         * @brief Gets the current application.
+         * @return Pointer to the current application.
          */
-        Application *GetApplication();
+        Application* GetApplication();
 
         /**
-         * @brief Gets the InputManager system.
-         * @return Reference to the InputManager.
+         * @brief Gets the input manager.
+         * @return Reference to the input manager.
          */
-        InputManager &GetInputManager();
+        InputManager& GetInputManager();
 
         /**
-         * @brief Gets the GraphicsAPI system.
-         * @return Reference to the GraphicsAPI.
+         * @brief Gets the graphics API interface.
+         * @return Reference to the graphics API.
          */
-        GraphicsAPI &GetGraphicsAPI();
+        GraphicsAPI& GetGraphicsAPI();
 
         /**
-         * @brief Gets the RenderQueue system.
-         * @return Reference to the RenderQueue.
+         * @brief Gets the render queue.
+         * @return Reference to the render queue.
          */
-        RenderQueue &GetRenderQueue();
+        RenderQueue& GetRenderQueue();
+
+        /**
+         * @brief Sets the current scene.
+         * @param scene Pointer to the scene.
+         */
+        void SetScene(Scene* scene);
+
+        /**
+         * @brief Gets the current scene.
+         * @return Pointer to the current scene.
+         */
+        Scene* GetScene();
 
     private:
-        std::unique_ptr<Application> m_application;
-        std::chrono::steady_clock::time_point m_lastTimePoint;
-        GLFWwindow *m_window = nullptr;
-        InputManager m_inputManager;
-        GraphicsAPI m_graphicsAPI;
-        RenderQueue m_renderQueue;
+        std::unique_ptr<Application> m_application; ///< The managed application instance.
+        std::chrono::steady_clock::time_point m_lastTimePoint; ///< Timestamp of the last frame.
+        GLFWwindow* m_window = nullptr; ///< Pointer to the GLFW window.
+        InputManager m_inputManager; ///< The input manager subsystem.
+        GraphicsAPI m_graphicsAPI; ///< The graphics API subsystem.
+        RenderQueue m_renderQueue; ///< The rendering queue.
+        std::unique_ptr<Scene> m_currentScene; ///< The current scene.
     };
 }
