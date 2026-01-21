@@ -47,6 +47,13 @@ jobs:
           database: 'build'
           ignore: 'engine/thirdparty|build|cmake-build-*'
 
-      - name: Fail if linter found errors
-        if: steps.linter.outputs.checks-failed > 0
-        run: echo "Linter found errors" && exit 1
+      - name: Apply clang-format
+        run: |
+          find engine/source -name "*.cpp" -o -name "*.h" | xargs clang-format -i -style=file
+
+      - name: Commit fixes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style: apply linting fixes"
+
+

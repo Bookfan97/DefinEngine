@@ -7,7 +7,10 @@ int main()
     eng::Engine& engine = eng::Engine::GetInstance();
     engine.SetApplication(game);
 
-    if (engine.Init(1280, 720))
+    static constexpr int WINDOW_WIDTH = 1280;
+    static constexpr int WINDOW_HEIGHT = 720;
+
+    if (engine.Init(WINDOW_WIDTH, WINDOW_HEIGHT))
     {
         engine.Run();
     }

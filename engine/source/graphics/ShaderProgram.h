@@ -31,7 +31,7 @@ namespace eng
         /**
          * @brief Binds the shader program for rendering.
          */
-        void Bind();
+        void Bind() const;
 
         /**
          * @brief Gets the location of a uniform variable.

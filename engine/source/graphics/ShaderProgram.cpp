@@ -12,7 +12,7 @@ namespace eng
         glDeleteProgram(m_shaderProgramID);
     }
 
-    void ShaderProgram::Bind()
+    void ShaderProgram::Bind() const
     {
         glUseProgram(m_shaderProgramID);
     }

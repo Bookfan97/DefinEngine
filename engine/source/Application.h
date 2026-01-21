@@ -18,7 +18,7 @@ namespace eng
          * @brief Pure virtual function for application initialization.
          * @return true if initialization was successful, false otherwise.
          */
-        virtual bool Init() = 0;
+        [[nodiscard]] virtual bool Init() = 0;
 
         /**
          * @brief Pure virtual function for the application update loop.
@@ -41,9 +41,9 @@ namespace eng
          * @brief Checks if the application has been requested to close.
          * @return true if closing is requested, false otherwise.
          */
-        bool NeedsToBeClosed() const;
+        [[nodiscard]] bool NeedsToBeClosed() const;
 
     private:
         bool m_needsToBeClosed = false; ///< Whether the application should close.
     };
-}
+} // namespace eng

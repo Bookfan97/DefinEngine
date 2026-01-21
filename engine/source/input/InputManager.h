@@ -21,6 +21,7 @@ namespace eng
 
 
     public:
+    public:
         /**
          * @brief Updates the pressed state of a key.
          * @param key The key code.
@@ -33,7 +34,7 @@ namespace eng
          * @param key The key code.
          * @return true if the key is pressed, false otherwise.
          */
-        bool IsKeyPressed(int key);
+        [[nodiscard]] bool IsKeyPressed(int key);
 
         /**
          * @brief Updates the pressed state of a mouse button.
@@ -47,7 +48,7 @@ namespace eng
          * @param button The mouse button code.
          * @return true if the button is pressed, false otherwise.
          */
-        bool IsMouseButtonPressed(int button);
+        [[nodiscard]] bool IsMouseButtonPressed(int button);
 
         /**
          * @brief Sets the previous frame's mouse position.
@@ -59,7 +60,7 @@ namespace eng
          * @brief Gets the previous frame's mouse position.
          * @return Reference to the mouse position.
          */
-        const glm::vec2& GetMousePositionOld() const;
+        [[nodiscard]] const glm::vec2& GetMousePositionOld() const;
 
         /**
          * @brief Sets the current frame's mouse position.
@@ -71,11 +72,14 @@ namespace eng
          * @brief Gets the current frame's mouse position.
          * @return Reference to the mouse position.
          */
-        const glm::vec2& GetMousePositionCurrent() const;
+        [[nodiscard]] const glm::vec2& GetMousePositionCurrent() const;
 
     private:
-        std::array<bool, 256> m_keys = { false }; ///< Array of key states.
-        std::array<bool, 16> m_mouseKeys = { false }; ///< Array of mouse button states.
+        static constexpr size_t KEY_COUNT = 256;
+        static constexpr size_t MOUSE_BUTTON_COUNT = 16;
+        
+        std::array<bool, KEY_COUNT> m_keys = { false }; ///< Array of key states.
+        std::array<bool, MOUSE_BUTTON_COUNT> m_mouseKeys = { false }; ///< Array of mouse button states.
         glm::vec2 m_mousePositionOld = glm::vec2(0.0f); ///< Mouse position in the previous frame.
         glm::vec2 m_mousePositionCurrent = glm::vec2(0.0f); ///< Mouse position in the current frame.
 

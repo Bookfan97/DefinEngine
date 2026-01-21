@@ -33,12 +33,12 @@ namespace eng
         /**
          * @brief Binds the mesh's VAO for rendering.
          */
-        void Bind();
+        void Bind() const;
 
         /**
          * @brief Draws the mesh using glDrawElements or glDrawArrays.
          */
-        void Draw();
+        void Draw() const;
 
     private:
         VertexLayout m_vertexLayout; ///< The layout information for the vertices.

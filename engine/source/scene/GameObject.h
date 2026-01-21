@@ -31,7 +31,7 @@ namespace eng
          * @brief Gets the name of the game object.
          * @return The name string.
          */
-        const std::string& GetName() const;
+        [[nodiscard]] const std::string& GetName() const;
 
         /**
          * @brief Sets the name of the game object.
@@ -49,7 +49,7 @@ namespace eng
          * @brief Checks if the object is still alive (not marked for destruction).
          * @return true if alive, false otherwise.
          */
-        bool IsAlive() const;
+        [[nodiscard]] bool IsAlive() const;
 
         /**
          * @brief Marks the object for destruction at the end of the frame.
@@ -87,7 +87,7 @@ namespace eng
          * @brief Gets the local position of the object.
          * @return Reference to the position vector.
          */
-        const glm::vec3& GetPosition() const;
+        [[nodiscard]] const glm::vec3& GetPosition() const;
 
         /**
          * @brief Sets the local position of the object.
@@ -99,7 +99,7 @@ namespace eng
          * @brief Gets the local rotation of the object.
          * @return Reference to the rotation quaternion.
          */
-        const glm::quat& GetRotation() const;
+        [[nodiscard]] const glm::quat& GetRotation() const;
 
         /**
          * @brief Sets the local rotation of the object.
@@ -111,7 +111,7 @@ namespace eng
          * @brief Gets the local scale of the object.
          * @return Reference to the scale vector.
          */
-        const glm::vec3& GetScale() const;
+        [[nodiscard]] const glm::vec3& GetScale() const;
 
         /**
          * @brief Sets the local scale of the object.
@@ -123,13 +123,13 @@ namespace eng
          * @brief Calculates the local transformation matrix.
          * @return The 4x4 local transform matrix.
          */
-        glm::mat4 GetLocalTransform() const;
+        [[nodiscard]] glm::mat4 GetLocalTransform() const;
 
         /**
          * @brief Calculates the world transformation matrix.
          * @return The 4x4 world transform matrix.
          */
-        glm::mat4 GetWorldTransform() const;
+        [[nodiscard]] glm::mat4 GetWorldTransform() const;
 
     protected:
         GameObject() = default;

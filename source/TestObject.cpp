@@ -76,7 +76,8 @@ void TestObject::Update(float deltaTime)
     eng::GameObject::Update(deltaTime);
 
     auto& input = eng::Engine::GetInstance().GetInputManager();
-    float moveSpeed = 2.0f;
+    constexpr float MOVE_SPEED = 2.0f;
+    float moveSpeed = MOVE_SPEED;
     // Horizontal movement
     if (input.IsKeyPressed(GLFW_KEY_A))
     {

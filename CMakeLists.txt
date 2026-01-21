@@ -8,6 +8,14 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(GitVersion)
 get_version_from_git()
 
+include(FetchContent)
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG 0.9.9.8
+)
+FetchContent_MakeAvailable(glm)
+
 project (GameDevelopmentProject VERSION ${CMAKE_PROJECT_VERSION})
 
 configure_file(
@@ -18,7 +26,7 @@ configure_file(
 set(PROJECT_SOURCE_FILES
         source/main.cpp
         source/game.cpp
-        source/game.h
+        source/Game.h
         source/TestObject.cpp
         source/TestObject.h
         engine/source/Engine.cpp
@@ -103,10 +111,10 @@ if(UNIX AND NOT APPLE)
     set(EXTRA_LIBS ${CMAKE_DL_LIBS} pthread)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
         glew_s
         OpenGL::GL
+        glm::glm
         ${EXTRA_LIBS}
 )
 

@@ -23,14 +23,14 @@ namespace eng
          * @brief Calculates the view matrix based on the object's transform.
          * @return The 4x4 view matrix.
          */
-        glm::mat4 GetViewMatrix() const;
+        [[nodiscard]] glm::mat4 GetViewMatrix() const;
 
         /**
          * @brief Calculates the projection matrix.
          * @param aspect The aspect ratio of the viewport.
          * @return The 4x4 projection matrix.
          */
-        glm::mat4 GetProjectionMatrix(float aspect) const;
+        [[nodiscard]] glm::mat4 GetProjectionMatrix(float aspect) const;
 
     private:
         static constexpr float DEFAULT_FOV = 60.0f;

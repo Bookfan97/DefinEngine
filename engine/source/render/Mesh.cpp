@@ -75,12 +75,12 @@ namespace eng
         }
     }
 
-    void Mesh::Bind()
+    void Mesh::Bind() const
     {
         glBindVertexArray(m_VAO);
     }
 
-    void Mesh::Draw()
+    void Mesh::Draw() const
     {
         if (m_indexCount > 0)
         {
