@@ -19,8 +19,14 @@ namespace eng {
         T *CreateObject(const std::string &name, GameObject *parent = nullptr) {
             T *obj = new T();
             obj->SetName(name);
-            SetParent(obj, parent);
-            m_objects.emplace_back(*obj);
+            if (!SetParent(obj, parent)) {
+                if (parent == nullptr) {
+                    m_objects.emplace_back(obj);
+                } else {
+                    parent->m_children.emplace_back(obj);
+                    obj->m_parent = parent;
+                }
+            }
             return obj;
         }
 

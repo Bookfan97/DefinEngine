@@ -20,9 +20,10 @@ namespace eng {
 
         void MarkForDestroy();
 
-    private:
+    protected:
         GameObject() = default;
 
+    private:
         std::string m_name;
         GameObject *m_parent = nullptr;
         std::vector<std::unique_ptr<GameObject> > m_children;

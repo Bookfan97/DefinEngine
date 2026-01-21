@@ -18,6 +18,8 @@ set(PROJECT_SOURCE_FILES
         source/main.cpp
         source/game.cpp
         source/game.h
+        source/TestObject.cpp
+        source/TestObject.h
         engine/source/Engine.cpp
         engine/source/Engine.h
         engine/source/Application.cpp
@@ -47,11 +49,7 @@ find_package(OpenGL REQUIRED)
 
 # Determine application type
 if(APPLE)
-    set(APP_TYPE MACOSX_BUNDLE
-            engine/source/scene/GameObject.cpp
-            engine/source/scene/GameObject.h
-            engine/source/scene/Scene.cpp
-            engine/source/scene/Scene.h)
+    set(APP_TYPE MACOSX_BUNDLE)
 elseif(WIN32)
     # We use a console application by default on Windows to avoid unresolved WinMain.
     # If a GUI-only app is desired, use WIN32 here and change main() to WinMain() or use linker flags.
@@ -59,7 +57,9 @@ elseif(WIN32)
             engine/source/scene/GameObject.cpp
             engine/source/scene/GameObject.h
             engine/source/scene/Scene.cpp
-            engine/source/scene/Scene.h)
+            engine/source/scene/Scene.h
+            source/TestObject.cpp
+            source/TestObject.h)
 endif()
 
 # Add the application

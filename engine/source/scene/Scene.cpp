@@ -19,7 +19,17 @@ namespace eng {
     GameObject *Scene::CreateObject(const std::string &name, GameObject *parent) {
         auto obj = new GameObject();
         obj->SetName(name);
-        SetParent(obj, parent);
+        if (SetParent(obj, parent)) {
+            return obj;
+        }
+
+        if (parent == nullptr) {
+            m_objects.emplace_back(obj);
+        } else {
+            parent->m_children.emplace_back(obj);
+            obj->m_parent = parent;
+        }
+
         return obj;
     }
 

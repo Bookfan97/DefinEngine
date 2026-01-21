@@ -29,8 +29,5 @@ public:
     void Destroy() override;
 
 private:
-    eng::Material m_material;           ///< Material used for rendering.
-    std::unique_ptr<eng::Mesh> m_mesh;  ///< Mesh object for the game.
-    float m_offsetX = 0.0f;             ///< X-axis offset for movement.
-    float m_offsetY = 0.0f;             ///< Y-axis offset for movement.
+    eng::Scene m_scene;
 };
