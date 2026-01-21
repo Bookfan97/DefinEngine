@@ -8,12 +8,6 @@ namespace eng
     class Material;
     class GraphicsAPI;
 
-namespace eng
-{
-    class Mesh;
-    class Material;
-    class GraphicsAPI;
-
     /**
      * @struct RenderCommand
      * @brief A command containing all information needed to draw an object.
@@ -58,6 +52,4 @@ namespace eng
     private:
         std::vector<RenderCommand> m_commands; ///< List of submitted render commands.
     };
-}
-
-}
+} // namespace eng

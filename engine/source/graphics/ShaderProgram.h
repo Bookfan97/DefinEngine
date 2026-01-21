@@ -66,4 +66,4 @@ namespace eng
         std::unordered_map<std::string, GLint> m_uniformLocationCache; ///< Cache for uniform locations.
         GLuint m_shaderProgramID = 0; ///< The OpenGL ID of the shader program.
     };
-}
+} // namespace eng

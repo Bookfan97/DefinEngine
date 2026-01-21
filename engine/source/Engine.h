@@ -24,12 +24,14 @@ namespace eng
          */
         static Engine& GetInstance();
 
-    private:
-        Engine() = default;
         Engine(const Engine&) = delete;
         Engine(Engine&&) = delete;
         Engine& operator=(const Engine&) = delete;
         Engine& operator=(Engine&&) = delete;
+
+    private:
+        Engine() = default;
+
 
     public:
         /**
@@ -101,4 +103,4 @@ namespace eng
         RenderQueue m_renderQueue; ///< The rendering queue.
         std::unique_ptr<Scene> m_currentScene; ///< The current scene.
     };
-}
+} // namespace eng

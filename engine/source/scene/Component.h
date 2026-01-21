@@ -27,7 +27,7 @@ namespace eng
          * @brief Gets the type ID of the component.
          * @return The unique type ID.
          */
-        virtual size_t GetTypeId() const = 0;
+        [[nodiscard]] virtual size_t GetTypeId() const = 0;
 
         /**
          * @brief Gets the owner game object.
@@ -63,4 +63,4 @@ namespace eng
 public: \
     static size_t TypeId() { return Component::StaticTypeId<ComponentClass>(); } \
     size_t GetTypeId() const override { return TypeId(); } 
-}
+} // namespace eng

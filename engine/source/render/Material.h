@@ -51,4 +51,4 @@ namespace eng
         std::unordered_map<std::string, float> m_floatParams; ///< Cached float parameters.
         std::unordered_map<std::string, std::pair<float, float>> m_float2Params; ///< Cached vec2 parameters.
     };
-}
+} // namespace eng

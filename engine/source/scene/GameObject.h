@@ -146,4 +146,4 @@ namespace eng
 
         friend class Scene;
     };
-}
+} // namespace eng

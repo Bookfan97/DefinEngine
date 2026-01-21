@@ -84,4 +84,4 @@ namespace eng
          */
         void DrawMesh(Mesh* mesh);
     };
-}
+} // namespace eng
