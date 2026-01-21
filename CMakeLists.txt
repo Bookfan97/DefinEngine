@@ -12,7 +12,7 @@ include(FetchContent)
 FetchContent_Declare(
     glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git
-    GIT_TAG 0.9.9.8
+    GIT_TAG 1.0.1
 )
 FetchContent_MakeAvailable(glm)
 
@@ -26,9 +26,7 @@ configure_file(
 set(PROJECT_SOURCE_FILES
         source/main.cpp
         source/Game.cpp
-        source/Game.h
         source/TestObject.cpp
-        source/TestObject.h
         engine/source/Engine.cpp
         engine/source/Engine.h
         engine/source/Application.cpp

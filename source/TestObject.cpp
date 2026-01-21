@@ -73,7 +73,7 @@ TestObject::TestObject()
 
 void TestObject::Update(float deltaTime)
 {
-    eng::GameObject::Update(deltaTime);
+    GameObject::Update(deltaTime);
 
     auto& input = eng::Engine::GetInstance().GetInputManager();
     constexpr float MOVE_SPEED = 2.0f;
@@ -100,8 +100,10 @@ void TestObject::Update(float deltaTime)
     m_material.SetParam("uOffset", m_offsetX, m_offsetY);
 
     eng::RenderCommand command;
-    command.material = &m_material;
-    command.mesh = m_mesh.get();
+    command.material = std::shared_ptr<eng::Material>(&m_material, [](eng::Material*) {});
+    command.mesh = m_mesh;
+
+    command.modelMatrix = GetWorldTransform();
 
     auto& renderQueue = eng::Engine::GetInstance().GetRenderQueue();
     renderQueue.Submit(command);

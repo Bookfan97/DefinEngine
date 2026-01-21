@@ -9,9 +9,6 @@
 class TestObject : public eng::GameObject
 {
 public:
-    /**
-     * @brief Constructs a new TestObject.
-     */
     TestObject();
 
     /**
