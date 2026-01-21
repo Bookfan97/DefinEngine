@@ -1,61 +1,69 @@
 #pragma once
+#include <GL/glew.h>
+#include <glm/mat4x4.hpp>
 #include <string>
 #include <unordered_map>
-#include <GL/glew.h>
 
-namespace eng {
+namespace eng
+{
+/**
+ * @class ShaderProgram
+ * @brief Manages an OpenGL shader program, including uniforms and binding.
+ */
+class ShaderProgram
+{
+  public:
+    ShaderProgram() = delete;
+    ShaderProgram(const ShaderProgram &) = delete;
+    ShaderProgram &operator=(const ShaderProgram &) = delete;
+
     /**
-     * @class ShaderProgram
-     * @brief Represents a compiled and linked shader program on the GPU.
+     * @brief Constructs a ShaderProgram with an existing OpenGL shader program ID.
+     * @param shaderProgramID The OpenGL ID of the shader program.
      */
-    class ShaderProgram {
-    public:
-        ShaderProgram() = delete;
+    explicit ShaderProgram(GLuint shaderProgramID);
 
-        ShaderProgram(const ShaderProgram &) = delete;
+    /**
+     * @brief Destructor. Deletes the OpenGL shader program.
+     */
+    ~ShaderProgram();
 
-        ShaderProgram &operator=(const ShaderProgram &) = delete;
+    /**
+     * @brief Binds the shader program for rendering.
+     */
+    void Bind() const;
 
-        /**
-         * @brief Constructs a ShaderProgram with an existing OpenGL shader program ID.
-         * @param shaderProgramID The ID of the linked shader program.
-         */
-        explicit ShaderProgram(GLuint shaderProgramID);
+    /**
+     * @brief Gets the location of a uniform variable.
+     * @param name The name of the uniform variable.
+     * @return The location of the uniform, or -1 if not found.
+     */
+    GLint GetUniformLocation(const std::string &name);
 
-        /**
-         * @brief Destructor that deletes the shader program from the GPU.
-         */
-        ~ShaderProgram();
+    /**
+     * @brief Sets a float uniform.
+     * @param name The name of the uniform.
+     * @param value The value to set.
+     */
+    void SetUniform(const std::string &name, float value);
 
-        /**
-         * @brief Binds this shader program for use in the current rendering state.
-         */
-        void Bind();
+    /**
+     * @brief Sets a vec2 uniform (two floats).
+     * @param name The name of the uniform.
+     * @param v0 The first component.
+     * @param v1 The second component.
+     */
+    void SetUniform(const std::string &name, float v0, float v1);
 
-        /**
-         * @brief Retrieves the location of a uniform variable.
-         * @param name The name of the uniform variable.
-         * @return The location of the uniform, or -1 if not found.
-         */
-        GLint GetUniformLocation(const std::string &name);
+    /**
+     * @brief Sets a mat4 uniform.
+     * @param name The name of the uniform.
+     * @param mat The 4x4 matrix to set.
+     */
+    void SetUniform(const std::string &name, const glm::mat4 &mat);
 
-        /**
-         * @brief Sets a float uniform value.
-         * @param name The name of the uniform.
-         * @param value The value to set.
-         */
-        void SetUniform(const std::string &name, float value);
-
-        /**
-         * @brief Sets a 2-component float uniform value.
-         * @param name The name of the uniform.
-         * @param v0 First component.
-         * @param v1 Second component.
-         */
-        void SetUniform(const std::string &name, float v0, float v1);
-
-    private:
-        std::unordered_map<std::string, GLint> m_uniformLocationCache;
-        GLuint m_shaderProgramID = 0;
-    };
-}
+  private:
+    std::unordered_map<std::string, GLint> m_uniformLocationCache; ///< Cache for uniform locations.
+    GLuint m_shaderProgramID = 0;                                  ///< The OpenGL ID of the shader program.
+};
+} // namespace eng

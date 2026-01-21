@@ -2,12 +2,21 @@ cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(GitVersion)
 get_version_from_git()
 
-project (GameDevelopmentProject VERSION ${CMAKE_PROJECT_VERSION})
+project (GameDevelopmentProject VERSION "${CMAKE_PROJECT_VERSION}")
+
+include(FetchContent)
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG 1.0.1
+)
+FetchContent_MakeAvailable(glm)
 
 configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/source/version.h.in"
@@ -16,8 +25,8 @@ configure_file(
 
 set(PROJECT_SOURCE_FILES
         source/main.cpp
-        source/game.cpp
-        source/game.h
+        source/Game.cpp
+        source/TestObject.cpp
         engine/source/Engine.cpp
         engine/source/Engine.h
         engine/source/Application.cpp
@@ -36,9 +45,23 @@ set(PROJECT_SOURCE_FILES
         engine/source/render/Material.h
         engine/source/render/RenderQueue.cpp
         engine/source/render/RenderQueue.h
+        engine/source/scene/Component.cpp
+        engine/source/scene/Component.h
+        engine/source/scene/GameObject.cpp
+        engine/source/scene/GameObject.h
+        engine/source/scene/Scene.cpp
+        engine/source/scene/Scene.h
+        engine/source/scene/components/CameraComponent.cpp
+        engine/source/scene/components/CameraComponent.h
+        engine/source/scene/components/MeshComponent.cpp
+        engine/source/scene/components/MeshComponent.h
+        engine/source/scene/components/PlayerControllerComponent.cpp
+        engine/source/scene/components/PlayerControllerComponent.h
 )
 # Find system OpenGL
-set(OpenGL_GL_PREFERENCE GLVND)
+if(NOT APPLE)
+    set(OpenGL_GL_PREFERENCE GLVND)
+endif()
 find_package(OpenGL REQUIRED)
 
 # Determine application type
@@ -92,6 +115,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
         glew_s
         OpenGL::GL
+        glm::glm
         ${EXTRA_LIBS}
 )
 

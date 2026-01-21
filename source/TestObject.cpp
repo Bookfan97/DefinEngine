@@ -1,8 +1,9 @@
-#include "game.h"
+#include "TestObject.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-bool Game::Init() {
+TestObject::TestObject()
+{
     std::string vertexShaderSource = R"(
         #version 330 core
         layout (location = 0) in vec3 position;
@@ -31,7 +32,7 @@ bool Game::Init() {
         }
     )";
 
-    auto &graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
+    auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
     auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
     m_material.SetShaderProgram(shaderProgram);
 
@@ -43,7 +44,7 @@ bool Game::Init() {
         0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f
     };
 
-    std::vector<unsigned int> indices =
+    std::vector<uint32_t> indices =
     {
         0, 1, 2,
         0, 2, 3
@@ -57,45 +58,53 @@ bool Game::Init() {
         3,
         GL_FLOAT,
         0
-    });
+        });
     // Color
     vertexLayout.elements.push_back({
         1,
         3,
         GL_FLOAT,
         sizeof(float) * 3
-    });
+        });
     vertexLayout.stride = sizeof(float) * 6;
 
-    m_mesh = std::make_unique<eng::Mesh>(vertexLayout, vertices, indices);
-
-    return true;
+    m_mesh = std::make_shared<eng::Mesh>(vertexLayout, vertices, indices);
 }
 
-void Game::Update(float deltaTime) {
-    auto &input = eng::Engine::GetInstance().GetInputManager();
+void TestObject::Update(float deltaTime)
+{
+    GameObject::Update(deltaTime);
+
+    auto& input = eng::Engine::GetInstance().GetInputManager();
+    constexpr float MOVE_SPEED = 2.0f;
+    float moveSpeed = MOVE_SPEED;
     // Horizontal movement
-    if (input.IsKeyPressed(GLFW_KEY_A)) {
-        m_offsetX -= 0.001f;
-    } else if (input.IsKeyPressed(GLFW_KEY_D)) {
-        m_offsetX += 0.001f;
+    if (input.IsKeyPressed(GLFW_KEY_A))
+    {
+        m_offsetX -= moveSpeed * deltaTime;
+    }
+    else if (input.IsKeyPressed(GLFW_KEY_D))
+    {
+        m_offsetX += moveSpeed * deltaTime;
     }
     // Vertical movement
-    if (input.IsKeyPressed(GLFW_KEY_W)) {
-        m_offsetY += 0.001f;
-    } else if (input.IsKeyPressed(GLFW_KEY_S)) {
-        m_offsetY -= 0.001f;
+    if (input.IsKeyPressed(GLFW_KEY_W))
+    {
+        m_offsetY += moveSpeed * deltaTime;
+    }
+    else if (input.IsKeyPressed(GLFW_KEY_S))
+    {
+        m_offsetY -= moveSpeed * deltaTime;
     }
 
     m_material.SetParam("uOffset", m_offsetX, m_offsetY);
 
     eng::RenderCommand command;
-    command.material = &m_material;
-    command.mesh = m_mesh.get();
+    command.material = std::shared_ptr<eng::Material>(&m_material, [](eng::Material*) {});
+    command.mesh = m_mesh;
 
-    auto &renderQueue = eng::Engine::GetInstance().GetRenderQueue();
+    command.modelMatrix = GetWorldTransform();
+
+    auto& renderQueue = eng::Engine::GetInstance().GetRenderQueue();
     renderQueue.Submit(command);
-}
-
-void Game::Destroy() {
 }

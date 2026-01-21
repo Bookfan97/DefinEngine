@@ -1,96 +1,105 @@
 #pragma once
-#include "input/InputManager.h"
 #include "graphics/GraphicsAPI.h"
+#include "input/InputManager.h"
 #include "render/RenderQueue.h"
-#include <memory>
+#include "scene/Scene.h"
 #include <chrono>
+#include <memory>
 
 struct GLFWwindow;
+namespace eng
+{
+class Application;
 
-namespace eng {
-    class Application;
+/**
+ * @class Engine
+ * @brief The core engine class managing subsystems and the application lifecycle.
+ */
+class Engine
+{
+  public:
+    /**
+     * @brief Gets the singleton instance of the Engine.
+     * @return Reference to the Engine instance.
+     */
+    static Engine &GetInstance();
+
+    Engine(const Engine &) = delete;
+    Engine(Engine &&) = delete;
+    Engine &operator=(const Engine &) = delete;
+    Engine &operator=(Engine &&) = delete;
+
+  private:
+    Engine() = default;
+
+  public:
+    /**
+     * @brief Initializes the engine and its subsystems.
+     * @param width The width of the game window.
+     * @param height The height of the game window.
+     * @return true if initialization was successful, false otherwise.
+     */
+    bool Init(int width, int height);
 
     /**
-     * @class Engine
-     * @brief The core engine class managing the game lifecycle and systems.
-     * 
-     * This class follows the Singleton pattern and provides access to major
-     * engine systems like GraphicsAPI, InputManager, and RenderQueue.
+     * @brief Runs the main engine loop.
      */
-    class Engine {
-    public:
-        /**
-         * @brief Gets the singleton instance of the Engine.
-         * @return Reference to the Engine instance.
-         */
-        static Engine &GetInstance();
+    void Run();
 
-    private:
-        Engine() = default;
+    /**
+     * @brief Shuts down the engine and cleans up resources.
+     */
+    void Destroy();
 
-        Engine(const Engine &) = delete;
+    /**
+     * @brief Sets the current application.
+     * @param app Pointer to the application.
+     */
+    void SetApplication(Application *app);
 
-        Engine(Engine &&) = delete;
+    /**
+     * @brief Gets the current application.
+     * @return Pointer to the current application.
+     */
+    Application *GetApplication();
 
-        Engine &operator=(const Engine &) = delete;
+    /**
+     * @brief Gets the input manager.
+     * @return Reference to the input manager.
+     */
+    InputManager &GetInputManager();
 
-        Engine &operator=(Engine &&) = delete;
+    /**
+     * @brief Gets the graphics API interface.
+     * @return Reference to the graphics API.
+     */
+    GraphicsAPI &GetGraphicsAPI();
 
-    public:
-        /**
-         * @brief Initializes the engine and its systems.
-         * @param width The width of the game window.
-         * @param height The height of the game window.
-         * @return true if initialization was successful, false otherwise.
-         */
-        bool Init(int width, int height);
+    /**
+     * @brief Gets the render queue.
+     * @return Reference to the render queue.
+     */
+    RenderQueue &GetRenderQueue();
 
-        /**
-         * @brief Starts the main game loop.
-         */
-        void Run();
+    /**
+     * @brief Sets the current scene.
+     * @param scene Pointer to the scene.
+     */
+    void SetScene(std::unique_ptr<Scene> scene);
 
-        /**
-         * @brief Shuts down the engine and cleans up resources.
-         */
-        void Destroy();
+    /**
+     * @brief Gets the current scene.
+     * @return Pointer to the current scene.
+     */
+    Scene *GetScene();
 
-        /**
-         * @brief Sets the current application to be managed by the engine.
-         * @param app Pointer to the application instance.
-         */
-        void SetApplication(Application *app);
-
-        /**
-         * @brief Gets the current application instance.
-         * @return Pointer to the Application instance.
-         */
-        Application *GetApplication();
-
-        /**
-         * @brief Gets the InputManager system.
-         * @return Reference to the InputManager.
-         */
-        InputManager &GetInputManager();
-
-        /**
-         * @brief Gets the GraphicsAPI system.
-         * @return Reference to the GraphicsAPI.
-         */
-        GraphicsAPI &GetGraphicsAPI();
-
-        /**
-         * @brief Gets the RenderQueue system.
-         * @return Reference to the RenderQueue.
-         */
-        RenderQueue &GetRenderQueue();
-
-    private:
-        std::unique_ptr<Application> m_application;
-        std::chrono::steady_clock::time_point m_lastTimePoint;
-        GLFWwindow *m_window = nullptr;
-        InputManager m_inputManager;
-        GraphicsAPI m_graphicsAPI;
-        RenderQueue m_renderQueue;
-    };
-}
+  private:
+    std::unique_ptr<Application> m_application;            ///< The managed application instance.
+    std::chrono::steady_clock::time_point m_lastTimePoint; ///< Timestamp of the last frame.
+    GLFWwindow *m_window = nullptr;                        ///< Pointer to the GLFW window.
+    InputManager m_inputManager;                           ///< The input manager subsystem.
+    GraphicsAPI m_graphicsAPI;                             ///< The graphics API subsystem.
+    RenderQueue m_renderQueue;                             ///< The rendering queue.
+    std::unique_ptr<Scene> m_currentScene;                 ///< The current scene.
+};
+} // namespace eng
