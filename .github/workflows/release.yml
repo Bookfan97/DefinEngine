@@ -41,7 +41,10 @@ jobs:
           # Run semantic-release in dry-run mode to get the next version
           # We use npx to run the local version from package.json
           # Allow command to fail (e.g. no changes, authentication issues) without failing the job
-          npx semantic-release --dry-run > release_output.txt 2>&1 || true
+          npx semantic-release --dry-run > release_output_raw.txt 2>&1 || true
+          
+          # Strip ANSI color codes for reliable parsing
+          sed 's/\x1b\[[0-9;]*m//g' release_output_raw.txt > release_output.txt
           cat release_output.txt
           
           # Extract version from output if a new release is planned

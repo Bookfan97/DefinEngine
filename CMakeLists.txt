@@ -45,7 +45,9 @@ set(PROJECT_SOURCE_FILES
         engine/source/scene/Scene.h
 )
 # Find system OpenGL
-set(OpenGL_GL_PREFERENCE GLVND)
+if(NOT APPLE)
+    set(OpenGL_GL_PREFERENCE GLVND)
+endif()
 find_package(OpenGL REQUIRED)
 
 # Determine application type
