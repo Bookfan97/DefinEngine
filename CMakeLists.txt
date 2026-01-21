@@ -64,13 +64,7 @@ if(APPLE)
 elseif(WIN32)
     # We use a console application by default on Windows to avoid unresolved WinMain.
     # If a GUI-only app is desired, use WIN32 here and change main() to WinMain() or use linker flags.
-    set(APP_TYPE ""
-            engine/source/scene/GameObject.cpp
-            engine/source/scene/GameObject.h
-            engine/source/scene/Scene.cpp
-            engine/source/scene/Scene.h
-            source/TestObject.cpp
-            source/TestObject.h)
+    set(APP_TYPE "")
 endif()
 
 # Add the application
@@ -111,6 +105,7 @@ if(UNIX AND NOT APPLE)
     set(EXTRA_LIBS ${CMAKE_DL_LIBS} pthread)
 endif()
 
+target_link_libraries(${PROJECT_NAME} PRIVATE
         glfw
         glew_s
         OpenGL::GL
