@@ -16,6 +16,12 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      - name: Generate compilation database
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+
       - name: Run cpp-linter (Report)
         uses: cpp-linter/cpp-linter-action@v2
         id: linter
@@ -27,13 +33,7 @@ jobs:
           files-changed-only: false
           thread-comments: true
           step-summary: true
-          database: '' 
-          extra-args: >-
-            -std=c++17
-            -I./source
-            -I./engine/source
-            -I./engine/thirdparty/glfw-3.4/include
-            -I./engine/thirdparty/glew/include
+          database: 'build'
           ignore: 'engine/thirdparty|build|cmake-build-*'
 
       - name: Fail if linter found errors

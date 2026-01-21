@@ -33,9 +33,13 @@ namespace eng
         glm::mat4 GetProjectionMatrix(float aspect) const;
 
     private:
-        float m_fov = 60.0f; ///< Field of view in degrees.
-        float m_nearPlane = 0.1f; ///< Near clipping plane distance.
-        float m_farPlane = 1000.0f; ///< Far clipping plane distance.
+        static constexpr float DEFAULT_FOV = 60.0f;
+        static constexpr float DEFAULT_NEAR_PLANE = 0.1f;
+        static constexpr float DEFAULT_FAR_PLANE = 1000.0f;
+
+        float m_fov = DEFAULT_FOV; ///< Field of view in degrees.
+        float m_nearPlane = DEFAULT_NEAR_PLANE; ///< Near clipping plane distance.
+        float m_farPlane = DEFAULT_FAR_PLANE; ///< Far clipping plane distance.
     };
 
-}
+} // namespace eng
