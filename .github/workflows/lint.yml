@@ -53,7 +53,9 @@ jobs:
 
       - name: Commit fixes
         uses: stefanzweifel/git-auto-commit-action@v5
+        continue-on-error: true
         with:
           commit_message: "style: apply linting fixes"
+
 
 
