@@ -8,6 +8,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(GitVersion)
 get_version_from_git()
 
+project (GameDevelopmentProject VERSION "${CMAKE_PROJECT_VERSION}")
+
 include(FetchContent)
 FetchContent_Declare(
     glm
@@ -15,8 +17,6 @@ FetchContent_Declare(
     GIT_TAG 1.0.1
 )
 FetchContent_MakeAvailable(glm)
-
-project (GameDevelopmentProject VERSION ${CMAKE_PROJECT_VERSION})
 
 configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/source/version.h.in"
