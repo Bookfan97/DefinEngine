@@ -1,6 +1,13 @@
 name: Lint
 
-on: [pull_request]
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   checks: write
@@ -10,6 +17,7 @@ permissions:
 jobs:
   cpp-lint:
     runs-on: ubuntu-latest
+    if: "${{ github.event.head_commit.message != 'style: apply linting fixes' }}"
     steps:
       - uses: actions/checkout@v4
         with:
