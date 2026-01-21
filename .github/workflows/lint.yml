@@ -32,9 +32,15 @@ jobs:
           # Match checks from the linter configuration
           CHECKS="-*,bugprone-*,clang-analyzer-*,google-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-trailing-return-type,-readability-identifier-length,-readability-uppercase-literal-suffix"
           
+          # Split INCLUDE_FLAGS into individual -extra-arg entries
+          EXTRA_ARGS=""
+          for flag in $INCLUDE_FLAGS; do
+            EXTRA_ARGS="$EXTRA_ARGS -extra-arg=$flag"
+          done
+
           # Run clang-tidy with fix. Ignoring errors because some files might fail to compile perfectly in this environment but we want to apply what we can.
           # We use xargs to process files.
-          find source engine/source -type f \( -name "*.cpp" -o -name "*.h" \) | xargs clang-tidy -fix -checks="$CHECKS" -extra-arg="$INCLUDE_FLAGS" -- || true
+          find source engine/source -type f \( -name "*.cpp" -o -name "*.h" \) | xargs clang-tidy -fix -checks="$CHECKS" $EXTRA_ARGS -- || true
 
       - name: Commit and Push Changes
         run: |

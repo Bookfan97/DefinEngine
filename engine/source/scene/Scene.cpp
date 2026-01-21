@@ -23,6 +23,7 @@ namespace eng
     void Scene::Clear()
     {
         m_objects.clear();
+        m_mainCamera = nullptr;
     }
 
     GameObject* Scene::CreateObject(const std::string& name, GameObject* parent)

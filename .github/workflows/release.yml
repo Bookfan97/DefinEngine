@@ -40,18 +40,32 @@ jobs:
         run: |
           # Run semantic-release in dry-run mode to get the next version
           # We use npx to run the local version from package.json
-          npx semantic-release --dry-run > release_output.txt
+          # Allow command to fail (e.g. no changes, authentication issues) without failing the job
+          npx semantic-release --dry-run > release_output.txt 2>&1 || true
           cat release_output.txt
           
           # Extract version from output if a new release is planned
           VERSION=$(grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+' release_output.txt || echo "")
+          
           if [ -n "$VERSION" ]; then
             echo "new_release_version=$VERSION" >> "$GITHUB_OUTPUT"
             echo "new_release_published=true" >> "$GITHUB_OUTPUT"
           else
             echo "new_release_published=false" >> "$GITHUB_OUTPUT"
-            # Fallback to current tag or 0.0.1 for the build
-            echo "new_release_version=0.0.1" >> "$GITHUB_OUTPUT"
+            echo "No new version detected from semantic-release, checking git tags..."
+            
+            # Fallback to latest tag
+            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+            
+            if [ -n "$LATEST_TAG" ]; then
+              # Strip optional v prefix
+              CLEAN_TAG=${LATEST_TAG#v}
+              echo "Found git tag: $LATEST_TAG, using version: $CLEAN_TAG"
+              echo "new_release_version=$CLEAN_TAG" >> "$GITHUB_OUTPUT"
+            else
+              echo "No tag found. Defaulting to 0.0.1"
+              echo "new_release_version=0.0.1" >> "$GITHUB_OUTPUT"
+            fi
           fi
 
   build:

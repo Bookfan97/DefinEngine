@@ -1,5 +1,6 @@
 #include "scene/GameObject.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 namespace eng
 {
@@ -51,6 +52,11 @@ namespace eng
 
     void GameObject::AddComponent(Component* component)
     {
+        if (!component)
+        {
+            std::cerr << "Error: Attempted to add nullptr component to GameObject " << m_name << std::endl;
+            return;
+        }
         m_components.emplace_back(component);
         component->m_owner = this;
     }

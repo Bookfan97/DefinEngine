@@ -19,9 +19,8 @@ namespace eng
     public:
         /**
          * @brief Initializes the graphics API (e.g., GLEW).
-         * @return true if initialization was successful, false otherwise.
          */
-        bool Init();
+        void Init();
 
         /**
          * @brief Creates a shader program from vertex and fragment shader sources.

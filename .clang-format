@@ -4,4 +4,4 @@ BreakBeforeBraces: Allman
 ColumnLimit: 120
 AllowShortFunctionsOnASingleLine: None
 KeepEmptyLinesAtTheStartOfBlocks: false
-Standard: Cpp17
+Standard: c++17

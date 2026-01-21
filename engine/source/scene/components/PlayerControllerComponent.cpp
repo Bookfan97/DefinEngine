@@ -40,23 +40,29 @@ namespace eng
 
         auto position = m_owner->GetPosition();
 
-        // Left/Right movement
+        glm::vec3 moveDirection(0.0f);
+
         if (inputManager.IsKeyPressed(GLFW_KEY_A))
         {
-            position -= right * m_moveSpeed * deltaTime;
+            moveDirection -= right;
         }
-        else if (inputManager.IsKeyPressed(GLFW_KEY_D))
+        if (inputManager.IsKeyPressed(GLFW_KEY_D))
         {
-            position += right * m_moveSpeed * deltaTime;
+            moveDirection += right;
         }
-        // Vertical movement
         if (inputManager.IsKeyPressed(GLFW_KEY_W))
         {
-            position += front * m_moveSpeed * deltaTime;
+            moveDirection += front;
         }
-        else if (inputManager.IsKeyPressed(GLFW_KEY_S))
+        if (inputManager.IsKeyPressed(GLFW_KEY_S))
         {
-            position -= front * m_moveSpeed * deltaTime;
+            moveDirection -= front;
+        }
+
+        if (glm::length(moveDirection) > 0.0f)
+        {
+            moveDirection = glm::normalize(moveDirection);
+            position += moveDirection * m_moveSpeed * deltaTime;
         }
         m_owner->SetPosition(position);
     }

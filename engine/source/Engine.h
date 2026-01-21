@@ -86,7 +86,7 @@ namespace eng
          * @brief Sets the current scene.
          * @param scene Pointer to the scene.
          */
-        void SetScene(Scene* scene);
+        void SetScene(std::unique_ptr<Scene> scene);
 
         /**
          * @brief Gets the current scene.

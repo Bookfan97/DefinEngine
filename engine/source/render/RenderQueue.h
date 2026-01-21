@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include <glm/mat4x4.hpp>
 
@@ -14,8 +15,8 @@ namespace eng
      */
     struct RenderCommand
     {
-        Mesh* mesh = nullptr; ///< Pointer to the mesh to draw.
-        Material* material = nullptr; ///< Pointer to the material to use.
+        std::shared_ptr<Mesh> mesh; ///< Pointer to the mesh to draw.
+        std::shared_ptr<Material> material; ///< Pointer to the material to use.
         glm::mat4 modelMatrix; ///< The transformation matrix of the object.
     };
 

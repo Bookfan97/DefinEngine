@@ -6,10 +6,9 @@
 
 namespace eng
 {
-    bool GraphicsAPI::Init()
+    void GraphicsAPI::Init()
     {
         glEnable(GL_DEPTH_TEST);
-        return true;
     }
 
     std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(const std::string& vertexSource,

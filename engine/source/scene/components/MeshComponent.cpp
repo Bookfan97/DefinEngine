@@ -21,8 +21,8 @@ namespace eng
         }
 
         RenderCommand command;
-        command.material = m_material.get();
-        command.mesh = m_mesh.get();
+        command.material = m_material;
+        command.mesh = m_mesh;
         command.modelMatrix = GetOwner()->GetWorldTransform();
 
         auto& renderQueue = Engine::GetInstance().GetRenderQueue();

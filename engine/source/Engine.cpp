@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <utility>
 
 namespace eng
 {
@@ -186,9 +187,9 @@ namespace eng
         return m_renderQueue;
     }
 
-    void Engine::SetScene(Scene* scene)
+    void Engine::SetScene(std::unique_ptr<Scene> scene)
     {
-        m_currentScene.reset(scene);
+        m_currentScene = std::move(scene);
     }
 
     Scene* Engine::GetScene()

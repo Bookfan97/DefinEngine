@@ -76,23 +76,24 @@ void TestObject::Update(float deltaTime)
     eng::GameObject::Update(deltaTime);
 
     auto& input = eng::Engine::GetInstance().GetInputManager();
+    float moveSpeed = 2.0f;
     // Horizontal movement
     if (input.IsKeyPressed(GLFW_KEY_A))
     {
-        m_offsetX -= 0.001f;
+        m_offsetX -= moveSpeed * deltaTime;
     }
     else if (input.IsKeyPressed(GLFW_KEY_D))
     {
-        m_offsetX += 0.001f;
+        m_offsetX += moveSpeed * deltaTime;
     }
     // Vertical movement
     if (input.IsKeyPressed(GLFW_KEY_W))
     {
-        m_offsetY += 0.001f;
+        m_offsetY += moveSpeed * deltaTime;
     }
     else if (input.IsKeyPressed(GLFW_KEY_S))
     {
-        m_offsetY -= 0.001f;
+        m_offsetY -= moveSpeed * deltaTime;
     }
 
     m_material.SetParam("uOffset", m_offsetX, m_offsetY);
