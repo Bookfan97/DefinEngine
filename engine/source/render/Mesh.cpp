@@ -1,94 +1,94 @@
 #include "render/Mesh.h"
-#include "graphics/GraphicsAPI.h"
 #include "Engine.h"
+#include "graphics/GraphicsAPI.h"
 
 namespace eng
 {
-    Mesh::Mesh(const VertexLayout& layout, const std::vector<float>& vertices, const std::vector<uint32_t>& indices)
+Mesh::Mesh(const VertexLayout &layout, const std::vector<float> &vertices, const std::vector<uint32_t> &indices)
+{
+    m_vertexLayout = layout;
+
+    auto &graphicsAPI = Engine::GetInstance().GetGraphicsAPI();
+
+    m_VBO = graphicsAPI.CreateVertexBuffer(vertices);
+    m_EBO = graphicsAPI.CreateIndexBuffer(indices);
+
+    glGenVertexArrays(1, &m_VAO);
+    glBindVertexArray(m_VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+
+    for (auto &element : m_vertexLayout.elements)
     {
-        m_vertexLayout = layout;
-
-        auto& graphicsAPI = Engine::GetInstance().GetGraphicsAPI();
-
-        m_VBO = graphicsAPI.CreateVertexBuffer(vertices);
-        m_EBO = graphicsAPI.CreateIndexBuffer(indices);
-
-        glGenVertexArrays(1, &m_VAO);
-        glBindVertexArray(m_VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-
-        for (auto& element : m_vertexLayout.elements)
-        {
-            glVertexAttribPointer(element.index, element.size, element.type, GL_FALSE,
-                m_vertexLayout.stride, (void*)(uintptr_t)element.offset);
-            glEnableVertexAttribArray(element.index);
-        }
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        if (m_vertexLayout.stride > 0)
-        {
-            m_vertexCount = (vertices.size() * sizeof(float)) / m_vertexLayout.stride;
-        }
-        else
-        {
-            m_vertexCount = 0;
-        }
-        m_indexCount = indices.size();
+        glVertexAttribPointer(element.index, element.size, element.type, GL_FALSE, m_vertexLayout.stride,
+                              (void *)(uintptr_t)element.offset);
+        glEnableVertexAttribArray(element.index);
     }
 
-    Mesh::Mesh(const VertexLayout& layout, const std::vector<float>& vertices)
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    if (m_vertexLayout.stride > 0)
     {
-        m_vertexLayout = layout;
+        m_vertexCount = (vertices.size() * sizeof(float)) / m_vertexLayout.stride;
+    }
+    else
+    {
+        m_vertexCount = 0;
+    }
+    m_indexCount = indices.size();
+}
 
-        auto& graphicsAPI = Engine::GetInstance().GetGraphicsAPI();
+Mesh::Mesh(const VertexLayout &layout, const std::vector<float> &vertices)
+{
+    m_vertexLayout = layout;
 
-        m_VBO = graphicsAPI.CreateVertexBuffer(vertices);
+    auto &graphicsAPI = Engine::GetInstance().GetGraphicsAPI();
 
-        glGenVertexArrays(1, &m_VAO);
-        glBindVertexArray(m_VAO);
+    m_VBO = graphicsAPI.CreateVertexBuffer(vertices);
 
-        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+    glGenVertexArrays(1, &m_VAO);
+    glBindVertexArray(m_VAO);
 
-        for (auto& element : m_vertexLayout.elements)
-        {
-            glVertexAttribPointer(element.index, element.size, element.type, GL_FALSE,
-                m_vertexLayout.stride, (void*)(uintptr_t)element.offset);
-            glEnableVertexAttribArray(element.index);
-        }
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        if (m_vertexLayout.stride > 0)
-        {
-            m_vertexCount = (vertices.size() * sizeof(float)) / m_vertexLayout.stride;
-        }
-        else
-        {
-            m_vertexCount = 0;
-        }
+    for (auto &element : m_vertexLayout.elements)
+    {
+        glVertexAttribPointer(element.index, element.size, element.type, GL_FALSE, m_vertexLayout.stride,
+                              (void *)(uintptr_t)element.offset);
+        glEnableVertexAttribArray(element.index);
     }
 
-    void Mesh::Bind() const
-    {
-        glBindVertexArray(m_VAO);
-    }
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    void Mesh::Draw() const
+    if (m_vertexLayout.stride > 0)
     {
-        if (m_indexCount > 0)
-        {
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indexCount), GL_UNSIGNED_INT, 0);
-        }
-        else
-        {
-            glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(m_vertexCount));
-        }
+        m_vertexCount = (vertices.size() * sizeof(float)) / m_vertexLayout.stride;
+    }
+    else
+    {
+        m_vertexCount = 0;
     }
 }
+
+void Mesh::Bind() const
+{
+    glBindVertexArray(m_VAO);
+}
+
+void Mesh::Draw() const
+{
+    if (m_indexCount > 0)
+    {
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indexCount), GL_UNSIGNED_INT, 0);
+    }
+    else
+    {
+        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(m_vertexCount));
+    }
+}
+} // namespace eng

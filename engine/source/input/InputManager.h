@@ -4,85 +4,83 @@
 
 namespace eng
 {
+/**
+ * @class InputManager
+ * @brief Manages keyboard and mouse input states.
+ */
+class InputManager
+{
+  public:
+    InputManager() = default;
+    InputManager(const InputManager &) = delete;
+    InputManager(InputManager &&) = delete;
+    InputManager &operator=(const InputManager &) = delete;
+    InputManager &operator=(InputManager &&) = delete;
+
+  private:
+  public:
+  public:
     /**
-     * @class InputManager
-     * @brief Manages keyboard and mouse input states.
+     * @brief Updates the pressed state of a key.
+     * @param key The key code.
+     * @param pressed true if the key is pressed, false otherwise.
      */
-    class InputManager
-    {
-    public:
-        InputManager() = default;
-        InputManager(const InputManager&) = delete;
-        InputManager(InputManager&&) = delete;
-        InputManager& operator=(const InputManager&) = delete;
-        InputManager& operator=(InputManager&&) = delete;
+    void SetKeyPressed(int key, bool pressed);
 
-    private:
+    /**
+     * @brief Checks if a key is currently pressed.
+     * @param key The key code.
+     * @return true if the key is pressed, false otherwise.
+     */
+    [[nodiscard]] bool IsKeyPressed(int key);
 
+    /**
+     * @brief Updates the pressed state of a mouse button.
+     * @param button The mouse button code.
+     * @param pressed true if the button is pressed, false otherwise.
+     */
+    void SetMouseButtonPressed(int button, bool pressed);
 
-    public:
-    public:
-        /**
-         * @brief Updates the pressed state of a key.
-         * @param key The key code.
-         * @param pressed true if the key is pressed, false otherwise.
-         */
-        void SetKeyPressed(int key, bool pressed);
+    /**
+     * @brief Checks if a mouse button is currently pressed.
+     * @param button The mouse button code.
+     * @return true if the button is pressed, false otherwise.
+     */
+    [[nodiscard]] bool IsMouseButtonPressed(int button);
 
-        /**
-         * @brief Checks if a key is currently pressed.
-         * @param key The key code.
-         * @return true if the key is pressed, false otherwise.
-         */
-        [[nodiscard]] bool IsKeyPressed(int key);
+    /**
+     * @brief Sets the previous frame's mouse position.
+     * @param pos The mouse position.
+     */
+    void SetMousePositionOld(const glm::vec2 &pos);
 
-        /**
-         * @brief Updates the pressed state of a mouse button.
-         * @param button The mouse button code.
-         * @param pressed true if the button is pressed, false otherwise.
-         */
-        void SetMouseButtonPressed(int button, bool pressed);
+    /**
+     * @brief Gets the previous frame's mouse position.
+     * @return Reference to the mouse position.
+     */
+    [[nodiscard]] const glm::vec2 &GetMousePositionOld() const;
 
-        /**
-         * @brief Checks if a mouse button is currently pressed.
-         * @param button The mouse button code.
-         * @return true if the button is pressed, false otherwise.
-         */
-        [[nodiscard]] bool IsMouseButtonPressed(int button);
+    /**
+     * @brief Sets the current frame's mouse position.
+     * @param pos The mouse position.
+     */
+    void SetMousePositionCurrent(const glm::vec2 &pos);
 
-        /**
-         * @brief Sets the previous frame's mouse position.
-         * @param pos The mouse position.
-         */
-        void SetMousePositionOld(const glm::vec2& pos);
+    /**
+     * @brief Gets the current frame's mouse position.
+     * @return Reference to the mouse position.
+     */
+    [[nodiscard]] const glm::vec2 &GetMousePositionCurrent() const;
 
-        /**
-         * @brief Gets the previous frame's mouse position.
-         * @return Reference to the mouse position.
-         */
-        [[nodiscard]] const glm::vec2& GetMousePositionOld() const;
+  private:
+    static constexpr size_t KEY_COUNT = 256;
+    static constexpr size_t MOUSE_BUTTON_COUNT = 16;
 
-        /**
-         * @brief Sets the current frame's mouse position.
-         * @param pos The mouse position.
-         */
-        void SetMousePositionCurrent(const glm::vec2& pos);
+    std::array<bool, KEY_COUNT> m_keys = {false};               ///< Array of key states.
+    std::array<bool, MOUSE_BUTTON_COUNT> m_mouseKeys = {false}; ///< Array of mouse button states.
+    glm::vec2 m_mousePositionOld = glm::vec2(0.0f);             ///< Mouse position in the previous frame.
+    glm::vec2 m_mousePositionCurrent = glm::vec2(0.0f);         ///< Mouse position in the current frame.
 
-        /**
-         * @brief Gets the current frame's mouse position.
-         * @return Reference to the mouse position.
-         */
-        [[nodiscard]] const glm::vec2& GetMousePositionCurrent() const;
-
-    private:
-        static constexpr size_t KEY_COUNT = 256;
-        static constexpr size_t MOUSE_BUTTON_COUNT = 16;
-        
-        std::array<bool, KEY_COUNT> m_keys = { false }; ///< Array of key states.
-        std::array<bool, MOUSE_BUTTON_COUNT> m_mouseKeys = { false }; ///< Array of mouse button states.
-        glm::vec2 m_mousePositionOld = glm::vec2(0.0f); ///< Mouse position in the previous frame.
-        glm::vec2 m_mousePositionCurrent = glm::vec2(0.0f); ///< Mouse position in the current frame.
-
-        friend class Engine;
-    };
+    friend class Engine;
+};
 } // namespace eng
