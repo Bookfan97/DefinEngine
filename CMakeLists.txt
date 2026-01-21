@@ -25,7 +25,7 @@ configure_file(
 
 set(PROJECT_SOURCE_FILES
         source/main.cpp
-        source/game.cpp
+        source/Game.cpp
         source/Game.h
         source/TestObject.cpp
         source/TestObject.h
@@ -47,10 +47,18 @@ set(PROJECT_SOURCE_FILES
         engine/source/render/Material.h
         engine/source/render/RenderQueue.cpp
         engine/source/render/RenderQueue.h
+        engine/source/scene/Component.cpp
+        engine/source/scene/Component.h
         engine/source/scene/GameObject.cpp
         engine/source/scene/GameObject.h
         engine/source/scene/Scene.cpp
         engine/source/scene/Scene.h
+        engine/source/scene/components/CameraComponent.cpp
+        engine/source/scene/components/CameraComponent.h
+        engine/source/scene/components/MeshComponent.cpp
+        engine/source/scene/components/MeshComponent.h
+        engine/source/scene/components/PlayerControllerComponent.cpp
+        engine/source/scene/components/PlayerControllerComponent.h
 )
 # Find system OpenGL
 if(NOT APPLE)
