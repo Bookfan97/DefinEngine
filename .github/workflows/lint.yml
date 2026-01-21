@@ -16,7 +16,6 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-
       - name: Install Dependencies
         run: |
           sudo apt-get update
@@ -56,6 +55,8 @@ jobs:
         continue-on-error: true
         with:
           commit_message: "style: apply linting fixes"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
