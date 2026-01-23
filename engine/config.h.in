@@ -1,0 +1,5 @@
+#pragma once
+
+#define ASSETS_ROOT "@ASSETS_DIR@"
+#define SHADERS_ROOT "@SHADERS_DIR@"
+#define SCRIPTS_ROOT "@SCRIPTS_DIR@"
