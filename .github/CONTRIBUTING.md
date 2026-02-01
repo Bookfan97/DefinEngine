@@ -1,4 +1,4 @@
-# Contributing to GameDevelopmentProject
+# Contributing to DefinEngine
 
 Thank you for your interest in contributing!
 
