@@ -1,7 +1,6 @@
 #include "Game.h"
 #include "TestObject.h"
 
-
 bool Game::Init()
 {
     m_scene.CreateObject<TestObject>("TestObject");
@@ -15,5 +14,4 @@ void Game::Update(float deltaTime)
 
 void Game::Destroy()
 {
-
 }

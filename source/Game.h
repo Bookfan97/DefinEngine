@@ -8,7 +8,7 @@
  */
 class Game : public eng::Application
 {
-public:
+  public:
     /**
      * @brief Initializes the game.
      * @return true if initialization was successful, false otherwise.
@@ -26,6 +26,6 @@ public:
      */
     void Destroy() override;
 
-private:
+  private:
     eng::Scene m_scene; ///< The game's main scene.
 };

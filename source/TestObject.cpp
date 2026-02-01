@@ -32,40 +32,21 @@ TestObject::TestObject()
         }
     )";
 
-    auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
+    auto &graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
     auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
     m_material.SetShaderProgram(shaderProgram);
 
-    std::vector<float> vertices =
-    {
-        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f
-    };
+    std::vector<float> vertices = {0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, 0.0f,
+                                   -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.5f,  -0.5f, 0.0f, 1.0f, 1.0f, 0.0f};
 
-    std::vector<uint32_t> indices =
-    {
-        0, 1, 2,
-        0, 2, 3
-    };
+    std::vector<uint32_t> indices = {0, 1, 2, 0, 2, 3};
 
     eng::VertexLayout vertexLayout;
 
     // Postion
-    vertexLayout.elements.push_back({
-        0,
-        3,
-        GL_FLOAT,
-        0
-        });
+    vertexLayout.elements.push_back({0, 3, GL_FLOAT, 0});
     // Color
-    vertexLayout.elements.push_back({
-        1,
-        3,
-        GL_FLOAT,
-        sizeof(float) * 3
-        });
+    vertexLayout.elements.push_back({1, 3, GL_FLOAT, sizeof(float) * 3});
     vertexLayout.stride = sizeof(float) * 6;
 
     m_mesh = std::make_shared<eng::Mesh>(vertexLayout, vertices, indices);
@@ -75,7 +56,7 @@ void TestObject::Update(float deltaTime)
 {
     GameObject::Update(deltaTime);
 
-    auto& input = eng::Engine::GetInstance().GetInputManager();
+    auto &input = eng::Engine::GetInstance().GetInputManager();
     constexpr float MOVE_SPEED = 2.0f;
     float moveSpeed = MOVE_SPEED;
     // Horizontal movement
@@ -100,11 +81,11 @@ void TestObject::Update(float deltaTime)
     m_material.SetParam("uOffset", m_offsetX, m_offsetY);
 
     eng::RenderCommand command;
-    command.material = std::shared_ptr<eng::Material>(&m_material, [](eng::Material*) {});
+    command.material = std::shared_ptr<eng::Material>(&m_material, [](eng::Material *) {});
     command.mesh = m_mesh;
 
     command.modelMatrix = GetWorldTransform();
 
-    auto& renderQueue = eng::Engine::GetInstance().GetRenderQueue();
+    auto &renderQueue = eng::Engine::GetInstance().GetRenderQueue();
     renderQueue.Submit(command);
 }

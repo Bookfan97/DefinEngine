@@ -3,8 +3,8 @@
 
 int main()
 {
-    Game* game = new Game();
-    eng::Engine& engine = eng::Engine::GetInstance();
+    Game *game = new Game();
+    eng::Engine &engine = eng::Engine::GetInstance();
     engine.SetApplication(game);
 
     static constexpr int WINDOW_WIDTH = 1280;
