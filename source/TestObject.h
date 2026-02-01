@@ -4,7 +4,7 @@
 
 class TestObject : public eng::GameObject
 {
-public:
+  public:
     TestObject();
 
     void Update(float deltaTime) override;

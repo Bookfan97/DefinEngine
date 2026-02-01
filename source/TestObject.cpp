@@ -34,7 +34,7 @@ TestObject::TestObject()
         }
     )";
 
-    auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
+    auto &graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
     auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShaderSource, fragmentShaderSource);
 
     auto material = std::make_shared<eng::Material>();
@@ -78,19 +78,9 @@ TestObject::TestObject()
     eng::VertexLayout vertexLayout;
 
     // Postion
-    vertexLayout.elements.push_back({
-        0,
-        3,
-        GL_FLOAT,
-        0
-        });
+    vertexLayout.elements.push_back({0, 3, GL_FLOAT, 0});
     // Color
-    vertexLayout.elements.push_back({
-        1,
-        3,
-        GL_FLOAT,
-        sizeof(float) * 3
-        });
+    vertexLayout.elements.push_back({1, 3, GL_FLOAT, sizeof(float) * 3});
     vertexLayout.stride = sizeof(float) * 6;
 
     auto mesh = std::make_shared<eng::Mesh>(vertexLayout, vertices, indices);
