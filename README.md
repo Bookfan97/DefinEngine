@@ -26,8 +26,8 @@ This project serves as a starting point for developing a game engine or graphics
     cmake --build build
     ```
 3.  **Run the application**:
-    - Windows: `.\build\Debug\GameDevelopmentProject.exe`
-    - Linux/macOS: `./build/GameDevelopmentProject`
+    - Windows: `.\build\Debug\DefinEngine.exe`
+    - Linux/macOS: `./build/DefinEngine`
 
 ### Scripts
 
@@ -65,7 +65,7 @@ The version is automatically extracted from git tags during the CMake configurat
 
 ### Releases
 
-Official releases can be found on the [GitHub Releases](https://github.com/user/GameDevelopmentProject/releases) page. Each release includes:
+Official releases can be found on the [GitHub Releases](https://github.com/user/DefinEngine/releases) page. Each release includes:
 - Source code (zip and tar.gz)
 - Platform-specific binaries (Windows ZIP, Linux TGZ, macOS DMG)
 - Automatically generated release notes
