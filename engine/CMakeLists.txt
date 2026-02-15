@@ -23,13 +23,20 @@ set(PROJECT_SOURCE_FILES
 	source/render/RenderQueue.cpp
 )
 
+configure_file(
+		"${PROJECT_SOURCE_DIR}/config.h.in"
+		"${CMAKE_CURRENT_BINARY_DIR}/config.h"
+)
+
 include_directories(source)
 add_library(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
+include_directories(thirdparty/std_image)
 
 # Add GLFW library
 add_subdirectory(thirdparty/glfw-3.4 "${CMAKE_CURRENT_BINARY_DIR}/glfw_build")
 include_directories(thirdparty/glfw-3.4/include)
 
+target_include_directories(${PROJECT_NAME} PRIVATE "${PROJECT_BINARY_DIR}")
 # Add Glew library
 set(BUILD_UTILS OFF CACHE BOOL "utilities" FORCE)
 add_subdirectory(thirdparty/glew/build/cmake "${CMAKE_CURRENT_BINARY_DIR}/glew_build")
@@ -41,4 +48,10 @@ set_property(TARGET glew PROPERTY FOLDER GLEW)
 target_link_libraries(${PROJECT_NAME} 
     glfw 
     glew_s
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${ASSET_DIR}
+		${CMAME_BINARY_DIR}/assets
 )

@@ -23,6 +23,13 @@ configure_file(
         "${CMAKE_CURRENT_BINARY_DIR}/version.h"
 )
 
+configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/engine/config.h.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+)
+
+set(ASSETS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/assets")
+
 set(PROJECT_SOURCE_FILES
         source/main.cpp
         source/Game.cpp
@@ -57,6 +64,8 @@ set(PROJECT_SOURCE_FILES
         engine/source/scene/components/MeshComponent.h
         engine/source/scene/components/PlayerControllerComponent.cpp
         engine/source/scene/components/PlayerControllerComponent.h
+        engine/io/FileSystem.cpp
+        engine/io/FileSystem.h
 )
 # Find system OpenGL
 if(NOT APPLE)
@@ -70,12 +79,21 @@ if(APPLE)
 elseif(WIN32)
     # We use a console application by default on Windows to avoid unresolved WinMain.
     # If a GUI-only app is desired, use WIN32 here and change main() to WinMain() or use linker flags.
-    set(APP_TYPE "")
+    set(APP_TYPE ""
+            engine/io/FileSystem.cpp
+            engine/io/FileSystem.h
+            engine/io/FileSystem.h
+            engine/thirdparty/std_image/stb_image.h)
 endif()
 
 # Add the application
 add_executable(${PROJECT_NAME} ${APP_TYPE} ${PROJECT_SOURCE_FILES})
-target_include_directories(${PROJECT_NAME} PRIVATE source engine/source "${CMAKE_CURRENT_BINARY_DIR}")
+target_include_directories(${PROJECT_NAME} PRIVATE 
+        source 
+        engine/source 
+        engine/thirdparty/std_image 
+        "${CMAKE_CURRENT_BINARY_DIR}"
+)
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES

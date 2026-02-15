@@ -187,6 +187,10 @@ RenderQueue &Engine::GetRenderQueue()
     return m_renderQueue;
 }
 
+FileSystem & Engine::GetFileSystem() {
+    return m_fileSystem;
+}
+
 void Engine::SetScene(std::unique_ptr<Scene> scene)
 {
     m_currentScene = std::move(scene);
