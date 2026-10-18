@@ -3,6 +3,7 @@
 name: Build and Release
 
 on:
+  workflow_dispatch: {}
   push:
     branches: [ "main" ]
     
@@ -12,14 +13,41 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: deployment
+  group: deployment-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
+  verify-local:
+    name: Verify local Linux build
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: [self-hosted, Linux, X64, definengine-linux]
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Configure
+        env:
+          CC: ${{ matrix.compiler }}
+          CXX: ${{ matrix.compiler == 'gcc' && 'g++' || 'clang++' }}
+        run: cmake -S . -B build -DCMAKE_PROJECT_VERSION=0.0.1 -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build --parallel 2
+      - name: Test
+        run: ctest --test-dir build --build-config Release --output-on-failure
+
   lint:
     name: C++ Linting
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'style: apply linting fixes')"
+    runs-on: [self-hosted, Linux, X64, definengine-linux]
+    if: "github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, 'style: apply linting fixes')"
     permissions:
       contents: write
       pull-requests: write
@@ -32,13 +60,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake pkg-config \
-            libx11-dev libxcursor-dev libxinerama-dev libxrandr-dev libxi-dev \
-            libxext-dev libxfixes-dev libxrender-dev libxxf86vm-dev \
-            libgl-dev libgl1-mesa-dev libglu1-mesa-dev libegl-dev \
-            libwayland-dev libwayland-bin wayland-protocols \
-            libxkbcommon-dev
+          cmake --version
+          clang-format --version
+          pkg-config --exists x11 xrandr xi wayland-client xkbcommon
 
       - name: Generate compilation database
         shell: bash
@@ -48,18 +72,17 @@ jobs:
           cmake .. -DCMAKE_PROJECT_VERSION=0.0.1 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: Run cpp-linter (Report)
-        uses: cpp-linter/cpp-linter-action@v2
         id: linter
         env:
           GITHUB_TOKEN: ${{ secrets.LINT_PAT }}
-        with:
-          style: 'file'
-          tidy-checks: '-*,bugprone-*,clang-analyzer-*,google-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-trailing-return-type,-readability-identifier-length,-readability-uppercase-literal-suffix'
-          files-changed-only: false
-          thread-comments: true
-          step-summary: true
-          database: 'build'
-          ignore: 'engine/thirdparty|build|cmake-build-*'
+        run: |
+          export PATH="/opt/cpp-linter/bin:$PATH"
+          /opt/cpp-linter/bin/cpp-linter \
+            --style file \
+            --version 21 --jobs 2 \
+            --tidy-checks='-*,bugprone-*,clang-analyzer-*,google-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-trailing-return-type,-readability-identifier-length,-readability-uppercase-literal-suffix' \
+            --files-changed-only false --thread-comments true --step-summary true \
+            --database build --ignore 'engine/thirdparty|build|cmake-build-*'
 
       - name: Apply clang-format
         run: |
@@ -75,7 +98,7 @@ jobs:
 
   get-version:
     name: Determine Next Version
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, definengine-linux]
     needs: lint
     outputs:
       new-version: ${{ steps.semantic.outputs.new_release_version }}
@@ -131,7 +154,7 @@ jobs:
 
   build:
     name: Build (${{ matrix.os }}, ${{ matrix.c_compiler }})
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os == 'ubuntu-latest' && fromJSON('["self-hosted","Linux","X64","definengine-linux"]') || matrix.os }}
     needs: get-version
 
     strategy:
@@ -177,13 +200,9 @@ jobs:
     - name: Install Dependencies (Linux)
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake pkg-config ccache \
-          libx11-dev libxcursor-dev libxinerama-dev libxrandr-dev libxi-dev \
-          libxext-dev libxfixes-dev libxrender-dev libxxf86vm-dev \
-          libgl-dev libgl1-mesa-dev libglu1-mesa-dev libegl-dev \
-          libwayland-dev libwayland-bin wayland-protocols \
-          libxkbcommon-dev
+        cmake --version
+        ccache --version
+        pkg-config --exists x11 xrandr xi wayland-client xkbcommon
 
     - name: Install Dependencies (macOS)
       if: runner.os == 'macOS'
@@ -231,7 +250,7 @@ jobs:
 
   documentation:
     name: Deploy Documentation
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, definengine-linux]
     needs: build
     steps:
       - name: Checkout
@@ -239,8 +258,8 @@ jobs:
 
       - name: Install Doxygen
         run: |
-          sudo apt-get update
-          sudo apt-get install -y doxygen graphviz
+          doxygen --version
+          dot -V
 
       - name: Run Doxygen
         run: doxygen Doxyfile
@@ -269,7 +288,7 @@ jobs:
           
   release:
     name: Release
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, definengine-linux]
     needs: [build, get-version]
     # Only release on main, and only if build succeeded
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.get-version.outputs.new-release-published == 'true'
