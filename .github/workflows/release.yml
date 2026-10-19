@@ -5,7 +5,7 @@ name: Build and Release
 on:
   workflow_dispatch: {}
   push:
-    branches: [ "main" ]
+    branches: [ "main", "codex/engine-runner-verify" ]
     
 permissions:
   contents: write
@@ -13,13 +13,13 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: deployment-${{ github.event_name }}
+  group: deployment-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   verify-local:
     name: Verify local Linux build
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/codex/engine-runner-verify')
     runs-on: [self-hosted, Linux, X64, definengine-linux]
     timeout-minutes: 30
     permissions:
@@ -47,7 +47,7 @@ jobs:
   lint:
     name: C++ Linting
     runs-on: [self-hosted, Linux, X64, definengine-linux]
-    if: "github.event_name != 'workflow_dispatch' && !contains(github.event.head_commit.message, 'style: apply linting fixes')"
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, 'style: apply linting fixes')"
     permissions:
       contents: write
       pull-requests: write
@@ -86,7 +86,7 @@ jobs:
 
       - name: Apply clang-format
         run: |
-          find source engine/source -name "*.cpp" -o -name "*.h" | xargs clang-format -i -style=file
+          find source engine/source -type f '(' -name '*.cpp' -o -name '*.h' ')' -exec clang-format -i -style=file '{}' +
 
       - name: Commit fixes
         uses: stefanzweifel/git-auto-commit-action@v5
